@@ -4,307 +4,353 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>출판인 PICK! 423권의 인생책</title>
-    <!-- 개성 있는 굵은 폰트(Black Han Sans)와 본문용 고딕체 조합 -->
-    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* 이미지에서 추출한 밝고 포근한 니트 색감 */
-            --bg-knit: #F9F8F4; /* 아주 밝은 크림색 배경 */
-            --text-brown: #544a3e; /* 따뜻한 밤색 텍스트 */
-            --card-bg: #FFFFFF; /* 깨끗한 흰색 카드 배경 */
-            
-            /* 포근한 포인트 컬러 */
-            --yarn-green: #7C9473; /* 쑥색/세이지 그린 */
-            --yarn-orange: #CB8F5E; /* 차분한 테라코타 오렌지 */
-            --yarn-beige: #A67B5B; /* 진한 베이지/모카 */
-            
-            /* 바느질 느낌의 테두리 색상 */
-            --stitch-color: #CFC4B6; 
+            /* 벚꽃 테마 색상 팔레트 */
+            --cherry-pink: #FFB7C5; 
+            --soft-pink: #FFF0F3;
+            --deep-pink: #D48192;
+            --sky-blue: #E0F7FA;
+            --bg-paper: #FFFBFC;
+            --text-main: #4A4A4A;
+            --text-muted: #8E8E8E;
+            --border-color: #F7E1E5;
         }
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: var(--bg-knit);
-            color: var(--text-brown);
+            background-color: var(--bg-paper);
+            color: var(--text-main);
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
+            line-height: 1.6;
+            /* 배경에 아주 은은한 꽃가루 패턴 추가 */
+            background-image: url('https://www.transparenttextures.com/patterns/pollen.png');
         }
 
-        h1, h2, .badge, .count-summary {
-            font-family: 'Black Han Sans', sans-serif;
-            font-weight: normal;
+        h1, h2, .quote-text {
+            font-family: 'Gowun Batang', serif;
         }
 
         header {
-            background-color: var(--yarn-green);
+            /* 핑크에서 연한 하늘색으로 이어지는 화사한 그라데이션 */
+            background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+            color: #5D5D5D;
             text-align: center;
-            padding: 4rem 1rem;
-            margin-bottom: 3rem;
-            /* 하단에 바느질 스티치 느낌의 테두리 추가 */
-            border-bottom: 4px dashed var(--bg-knit);
+            padding: 6rem 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
             position: relative;
+            overflow: hidden;
         }
 
         header h1 {
-            margin: 0 0 1rem 0;
-            font-size: 4rem;
-            letter-spacing: 1px;
-            color: #FFFFFF;
-            /* 부드러운 그림자로 변경 */
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin: 0 0 1.2rem 0;
+            font-size: 3.2rem;
+            color: var(--deep-pink);
+            letter-spacing: -1px;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
         }
 
         header p {
             margin: 0;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--yarn-green);
-            letter-spacing: 1px;
-            background-color: var(--bg-knit);
-            display: inline-block;
-            padding: 0.6rem 1.5rem;
-            border-radius: 30px;
-            /* 라벨에도 스티치 추가 */
-            border: 2px dashed var(--yarn-green);
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #7A8B99;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem 5rem 1rem;
+            padding: 0 1.5rem 5rem 1.5rem;
+        }
+
+        .summary-wrapper {
+            text-align: center;
+            margin-bottom: 3.5rem;
         }
 
         .count-summary {
-            text-align: right;
-            margin-bottom: 2rem;
-            font-size: 1.3rem;
-            color: var(--yarn-orange);
-            text-shadow: 1px 1px 0px var(--bg-knit);
+            background-color: white;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 1.15rem;
+            color: var(--deep-pink);
+            box-shadow: 0 4px 15px rgba(255, 183, 197, 0.2);
+            border: 1px solid var(--border-color);
         }
 
-        /* 명함 카드 그리드 */
+        /* 카드 디자인 구조 유지 */
         .book-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         .book-card {
-            background-color: var(--card-bg);
-            /* 직물에 덧댄 듯한 바느질 스티치 테두리 적용 */
-            border: 2px dashed var(--stitch-color);
-            border-radius: 12px;
-            padding: 1.8rem;
-            /* 부드럽고 포근한 그림자 */
-            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
-            transition: all 0.3s ease-in-out;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: 0 10px 30px rgba(212, 129, 146, 0.05);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             display: flex;
             flex-direction: column;
-            position: relative;
+            overflow: hidden;
         }
 
         .book-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 20px rgba(0,0,0,0.1);
-            border-color: var(--yarn-orange);
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px rgba(212, 129, 146, 0.12);
+            border-color: var(--cherry-pink);
+        }
+
+        .cover-area {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(to bottom, var(--soft-pink), #FFFFFF);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-bottom: 1px solid #fdf0f2;
+        }
+
+        .cover-area img {
+            width: auto;
+            height: 85%;
+            object-fit: contain;
+            box-shadow: 5px 8px 15px rgba(0,0,0,0.08);
+            transition: transform 0.4s ease;
+        }
+
+        .book-card:hover .cover-area img {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 1.8rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .recommender-info {
-            border-bottom: 2px dotted var(--stitch-color);
-            padding-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            border-bottom: 1px solid #FDF0F2;
+            padding-bottom: 1rem;
             margin-bottom: 1.2rem;
+            color: #999;
+            font-size: 0.85rem;
         }
 
-        .recommender-info .badge {
-            display: inline-block;
-            background-color: var(--yarn-beige);
-            color: #fff;
-            font-size: 0.95rem;
-            padding: 0.3rem 0.8rem;
-            border-radius: 6px;
-            margin-bottom: 0.8rem;
-            letter-spacing: 1px;
-            /* 뱃지에도 스티치 느낌 */
-            border: 2px dotted rgba(255,255,255,0.5);
-        }
-
-        .recommender-info h3 {
-            margin: 0;
-            font-size: 1.1rem;
-            color: var(--text-brown);
-            font-weight: 700;
-            line-height: 1.4;
-        }
-
-        .book-info h2 {
-            margin: 0 0 1rem 0;
-            font-size: 1.7rem;
-            color: var(--yarn-green);
-            line-height: 1.3;
-            letter-spacing: -0.5px;
-        }
-
-        .book-info p {
-            margin: 0.4rem 0;
-            color: #6b5f52;
+        .recommender-info b {
+            color: var(--deep-pink);
             font-size: 1rem;
         }
 
-        .label {
-            font-weight: 700;
-            color: var(--yarn-orange);
-            margin-right: 0.4rem;
-        }
-
-        .reason-text {
-            margin-top: 1.5rem;
-            padding: 1.2rem;
-            background-color: #F4F1EB; /* 카드보다 약간 어두운 직물 느낌 배경 */
-            border-radius: 8px;
-            /* 왼쪽 포인트 라인을 바느질처럼 표현 */
-            border-left: 5px dotted var(--yarn-green);
-            font-size: 0.95rem;
-            color: var(--text-brown);
-            line-height: 1.7;
-        }
-
-        #loading {
-            text-align: center;
+        .book-info h2 {
+            margin: 0 0 0.8rem 0;
             font-size: 1.5rem;
-            color: var(--yarn-green);
-            margin-top: 5rem;
-            font-family: 'Black Han Sans', sans-serif;
+            color: #333;
+            line-height: 1.4;
+            word-break: keep-all;
+        }
+
+        .book-info h2 a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .book-info h2 a:hover {
+            color: var(--deep-pink);
+        }
+
+        .detail-row {
+            margin: 0.4rem 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .label {
+            color: #C0A4A9;
+            margin-right: 0.4rem;
+            font-weight: 500;
+        }
+
+        .reason-box {
+            margin-top: 1.5rem;
+            background-color: #FFF9FA;
+            padding: 1.2rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--cherry-pink);
+            position: relative;
+        }
+
+        .quote-text {
+            margin: 0;
+            line-height: 1.7;
+            color: #555;
+            font-size: 0.98rem;
+            word-break: keep-all;
+        }
+
+        #loader {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: var(--deep-pink);
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.3rem; }
+            header p { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>FAVOREAD 423</h1>
-        <p>출판인들이 추천하는 단 하나의 인생책</p>
+        <h1>🌸 출판인 PICK! 423권의 인생책</h1>
+        <p>봄바람과 함께 전해지는 책 만드는 사람들의 이야기 ✨</p>
     </header>
 
     <div class="container">
-        <div id="loading">🧶 데이터를 한 땀 한 땀 불러오는 중...</div>
-        <div class="count-summary" id="count-summary" style="display: none;">
-            총 0권의 추천이 로드되었습니다
+        <div class="summary-wrapper">
+            <div class="count-summary" id="count-summary">
+                인생책 목록을 불러오는 중입니다...
+            </div>
         </div>
-        <div class="book-grid" id="book-grid" style="display: none;">
-            <!-- 데이터가 이곳에 생성됩니다. -->
+        
+        <div id="loader">봄날의 서재에서 책을 고르고 있습니다... 📖</div>
+        
+        <div class="book-grid" id="book-grid">
+            <!-- 목록이 이곳에 생성됩니다. -->
         </div>
     </div>
 
     <script>
-        // 깃허브에 올리신 CSV 파일 이름
-        const csvFilePath = './423data.csv'; 
-
-        // CSV 파싱 함수
         function parseCSV(text) {
-            let result = [];
-            let row = [];
+            const rows = [];
+            let currentField = '';
             let inQuotes = false;
-            let value = "";
-            
+            let currentRow = [];
+
             for (let i = 0; i < text.length; i++) {
-                let char = text[i];
-                if (char === '"') {
+                const char = text[i];
+                const nextChar = text[i + 1];
+
+                if (char === '"' && inQuotes && nextChar === '"') {
+                    currentField += '"';
+                    i++;
+                } else if (char === '"') {
                     inQuotes = !inQuotes;
                 } else if (char === ',' && !inQuotes) {
-                    row.push(value.trim());
-                    value = "";
-                } else if (char === '\n' && !inQuotes) {
-                    row.push(value.trim());
-                    result.push(row);
-                    row = [];
-                    value = "";
-                } else if (char === '\r' && !inQuotes) {
-                    // \r은 무시합니다
+                    currentRow.push(currentField.trim());
+                    currentField = '';
+                } else if ((char === '\r' || char === '\n') && !inQuotes) {
+                    if (currentField || currentRow.length > 0) {
+                        currentRow.push(currentField.trim());
+                        rows.push(currentRow);
+                        currentField = '';
+                        currentRow = [];
+                    }
+                    if (char === '\r' && nextChar === '\n') i++;
                 } else {
-                    value += char;
+                    currentField += char;
                 }
             }
-            if (value || row.length > 0) {
-                row.push(value.trim());
-                result.push(row);
+            if (currentField || currentRow.length > 0) {
+                currentRow.push(currentField.trim());
+                rows.push(currentRow);
             }
-            return result;
+            return rows;
         }
 
-        function formatData(parsedCsv) {
-            if (parsedCsv.length < 2) return [];
-            
-            const headers = parsedCsv[0];
-            const dataRows = parsedCsv.slice(1);
-            
-            return dataRows.map(row => {
-                let obj = {};
-                headers.forEach((header, index) => {
-                    obj[header] = row[index] || '';
-                });
-                return obj;
-            }).filter(item => item['추천도서명']);
-        }
-
-        async function fetchAndRenderBooks() {
+        async function loadBooks() {
             const grid = document.getElementById('book-grid');
             const summary = document.getElementById('count-summary');
-            const loading = document.getElementById('loading');
+            const loader = document.getElementById('loader');
 
             try {
-                const response = await fetch(csvFilePath);
-                if (!response.ok) {
-                    throw new Error('파일을 찾을 수 없습니다.');
-                }
+                const response = await fetch('423data.csv');
+                if (!response.ok) throw new Error('데이터 파일을 찾을 수 없습니다.');
                 
-                const csvData = await response.text();
-                const parsedCsv = parseCSV(csvData);
-                const books = formatData(parsedCsv);
+                const csvText = await response.text();
+                const data = parseCSV(csvText);
 
-                loading.style.display = 'none';
-                summary.style.display = 'block';
-                grid.style.display = 'grid';
+                const header = data[0];
+                const rows = data.slice(1);
 
-                summary.textContent = `총 ${books.length}권의 추천이 로드되었습니다`;
+                const idx = {
+                    name: header.indexOf('성명'),
+                    company: header.indexOf('소속'),
+                    role: header.indexOf('직책'),
+                    displayName: header.indexOf('표기명'),
+                    bookTitle: header.indexOf('추천도서명'),
+                    author: header.indexOf('저자'),
+                    publisher: header.indexOf('출판사'),
+                    reason: header.indexOf('추천이유'),
+                    bookUrl: header.indexOf('도서 url'),
+                    coverUrl: header.indexOf('표지 url')
+                };
 
-                books.forEach(book => {
-                    const company = book['소속'] || '';
-                    const role = book['직책'] || '';
-                    const name = book['표기명'] || book['성명'] || ''; 
-                    const title = book['추천도서명'] || '';
-                    const author = book['저자'] || '';
-                    const publisher = book['출판사'] || '';
-                    const reason = book['추천이유'] || '';
+                loader.style.display = 'none';
+                summary.innerHTML = `현재 <strong>${rows.length}권</strong>의 빛나는 인생책이 모였습니다.`;
+
+                rows.forEach(row => {
+                    if (row.length < 5) return;
+
+                    const book = {
+                        name: row[idx.displayName] || row[idx.name],
+                        company: row[idx.company],
+                        role: row[idx.role],
+                        title: row[idx.bookTitle],
+                        author: row[idx.author],
+                        publisher: row[idx.publisher],
+                        reason: row[idx.reason],
+                        url: row[idx.bookUrl] || '#',
+                        cover: row[idx.coverUrl] || 'https://via.placeholder.com/150x220?text=No+Cover'
+                    };
 
                     const card = document.createElement('div');
                     card.className = 'book-card';
                     
                     card.innerHTML = `
-                        <div class="recommender-info">
-                            <span class="badge">PICK</span>
-                            <h3>${company} <br> ${role} ${name}</h3>
+                        <div class="cover-area">
+                            <img src="${book.cover}" alt="${book.title} 표지" onerror="this.src='https://via.placeholder.com/150x220?text=No+Image'">
                         </div>
-                        <div class="book-info">
-                            <h2>${title}</h2>
-                            <p><span class="label">저자</span> ${author}</p>
-                            <p><span class="label">출판사</span> ${publisher}</p>
-                            ${reason ? `
-                            <div class="reason-text">
-                                ${reason}
+                        <div class="card-content">
+                            <div class="recommender-info">
+                                <span><b>${book.name}</b> (${book.role})</span>
+                                <span>🏢 ${book.company}</span>
                             </div>
-                            ` : ''}
+                            <div class="book-info">
+                                <h2><a href="${book.url}" target="_blank">${book.title}</a></h2>
+                                <div class="detail-row"><span class="label">✍️ 저자</span> ${book.author}</div>
+                                <div class="detail-row"><span class="label">🏛️ 출판</span> ${book.publisher}</div>
+                            </div>
+                            <div class="reason-box">
+                                <p class="quote-text">"${book.reason}"</p>
+                            </div>
                         </div>
                     `;
                     
                     grid.appendChild(card);
                 });
+
             } catch (error) {
-                console.error('데이터 로딩 오류:', error);
-                loading.innerHTML = '데이터 로드 실패: 423data.csv 파일을 확인하세요.';
+                console.error(error);
+                loader.innerHTML = `⚠️ 데이터를 불러오는 중 오류가 발생했습니다.`;
+                summary.innerText = "데이터 로드 실패";
             }
         }
 
-        window.onload = fetchAndRenderBooks;
+        window.onload = loadBooks;
     </script>
 
 </body>
