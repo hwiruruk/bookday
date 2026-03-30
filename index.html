@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>출판인 PICK! 423권의 인생책</title>
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* 벚꽃 테마 색상 팔레트 */
+            /* [디자인] 벚꽃 테마 색상 팔레트 */
             --cherry-pink: #FFB7C5; 
             --soft-pink: #FFF0F3;
             --deep-pink: #D48192;
@@ -19,6 +19,7 @@
         }
 
         body {
+            /* [적용] 기본 본문 서체 설정 */
             font-family: 'Noto Sans KR', sans-serif;
             background-color: var(--bg-paper);
             color: var(--text-main);
@@ -29,12 +30,13 @@
             background-image: url('https://www.transparenttextures.com/patterns/pollen.png');
         }
 
+        /* [적용] 제목과 인용구에 명조체 계열 적용 */
         h1, h2, .quote-text {
-            font-family: 'Gowun Batang', serif;
+            font-family: 'Nanum Myeongjo', serif;
         }
 
         header {
-            /* 핑크에서 연한 하늘색으로 이어지는 화사한 그라데이션 */
+            /* [디자인] 핑크에서 연한 하늘색으로 이어지는 화사한 그라데이션 */
             background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
             color: #5D5D5D;
             text-align: center;
@@ -45,12 +47,24 @@
             overflow: hidden;
         }
 
+        /* [디자인] 헤더 배경 패턴 텍스트와 벚꽃 일러스트 (실제 이미지가 없으므로 간단히 처리) */
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('https://via.placeholder.com/1200x300?text=Background+Pattern');
+            opacity: 0.1;
+        }
+
         header h1 {
             margin: 0 0 1.2rem 0;
             font-size: 3.2rem;
             color: var(--deep-pink);
             letter-spacing: -1px;
             text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
         }
 
         header p {
@@ -58,6 +72,9 @@
             font-size: 1.3rem;
             font-weight: 400;
             color: #7A8B99;
+            font-family: 'Gowun Batang', serif;
+            position: relative;
+            z-index: 1;
         }
 
         .container {
@@ -80,15 +97,32 @@
             color: var(--deep-pink);
             box-shadow: 0 4px 15px rgba(255, 183, 197, 0.2);
             border: 1px solid var(--border-color);
+            font-weight: 700;
         }
 
-        /* 카드 디자인 구조 유지 */
+        /* [디자인] 카드 그리드 구조 */
         .book-grid {
-            display: grid;
+            display: none; /* 데이터를 로드하기 전에는 숨깁니다 */
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2.5rem;
+            /* [애니메이션] 데이터 로드 후 페이드인 효과 */
+            animation: fadeIn 0.8s ease-out forwards;
         }
 
+        /* [애니메이션] 페이드인 정의 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* [디자인] 카드 전체를 클릭 가능하게 만드는 <a> 태그 스타일 */
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        /* [디자인] 카드 디자인 통합 */
         .book-card {
             background-color: #FFFFFF;
             border: 1px solid var(--border-color);
@@ -103,26 +137,41 @@
 
         .book-card:hover {
             transform: translateY(-12px);
-            box-shadow: 0 25px 50px rgba(212, 129, 146, 0.12);
+            /* [디자인] 호버 시 핑크색 그림자 효과 */
+            box-shadow: 0 25px 50px rgba(212, 129, 146, 0.15);
             border-color: var(--cherry-pink);
         }
 
+        /* [디자인] 카드 헤더 (핑크 밴드) */
+        .recommender-info {
+            background-color: var(--soft-pink);
+            padding: 1.2rem;
+            border-bottom: 1px solid #fdf0f2;
+            color: var(--deep-pink);
+            font-size: 1rem;
+            font-weight: 700;
+            position: relative;
+        }
+
+        /* [디자인] 카드 도서 영역 (그라데이션 웰) */
         .cover-area {
             width: 100%;
-            height: 220px;
-            background: linear-gradient(to bottom, var(--soft-pink), #FFFFFF);
+            height: 240px;
+            background: linear-gradient(to bottom, #FFFFFF, var(--soft-pink));
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
             border-bottom: 1px solid #fdf0f2;
+            position: relative;
         }
 
+        /* [디자인] 도서 표지가 부유하는 듯한 효과 */
         .cover-area img {
             width: auto;
             height: 85%;
             object-fit: contain;
-            box-shadow: 5px 8px 15px rgba(0,0,0,0.08);
+            box-shadow: 5px 10px 20px rgba(0,0,0,0.1);
             transition: transform 0.4s ease;
         }
 
@@ -130,6 +179,7 @@
             transform: scale(1.05);
         }
 
+        /* [디자인] 카드 내용 영역 */
         .card-content {
             padding: 1.8rem;
             flex-grow: 1;
@@ -137,73 +187,62 @@
             flex-direction: column;
         }
 
-        .recommender-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-            border-bottom: 1px solid #FDF0F2;
-            padding-bottom: 1rem;
-            margin-bottom: 1.2rem;
-            color: #999;
-            font-size: 0.85rem;
-        }
-
-        .recommender-info b {
-            color: var(--deep-pink);
-            font-size: 1rem;
-        }
-
         .book-info h2 {
-            margin: 0 0 0.8rem 0;
-            font-size: 1.5rem;
+            margin: 0 0 1rem 0;
+            font-size: 1.8rem;
             color: #333;
             line-height: 1.4;
             word-break: keep-all;
+            font-weight: 700;
         }
 
-        .book-info h2 a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .book-info h2 a:hover {
-            color: var(--deep-pink);
-        }
-
+        /* [적용] 저자, 출판 제거 */
         .detail-row {
-            margin: 0.4rem 0;
-            color: #666;
-            font-size: 0.9rem;
+            display: none;
         }
 
-        .label {
-            color: #C0A4A9;
-            margin-right: 0.4rem;
-            font-weight: 500;
-        }
-
-        .reason-box {
-            margin-top: 1.5rem;
-            background-color: #FFF9FA;
-            padding: 1.2rem;
-            border-radius: 12px;
-            border-left: 4px solid var(--cherry-pink);
-            position: relative;
-        }
-
+        /* [디자인] 추천 이유 텍스트 */
         .quote-text {
             margin: 0;
-            line-height: 1.7;
+            line-height: 1.8;
             color: #555;
-            font-size: 0.98rem;
+            font-size: 1rem;
             word-break: keep-all;
         }
 
+        /* [디자인] 로딩 및 오류 메시지 */
         #loader {
             text-align: center;
             padding: 50px;
             font-size: 1.2rem;
             color: var(--deep-pink);
+            font-family: 'Gowun Batang', serif;
+        }
+
+        /* [디자인] 페이지네이션 버튼 스타일 */
+        .pagination {
+            text-align: center;
+            margin-top: 4rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .pagination-button {
+            background-color: white;
+            color: var(--deep-pink);
+            border: 1px solid var(--border-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            font-weight: 700;
+        }
+
+        .pagination-button:hover, .pagination-button.active {
+            background-color: var(--deep-pink);
+            color: white;
         }
 
         @media (max-width: 768px) {
@@ -229,11 +268,14 @@
         <div id="loader">봄날의 서재에서 책을 고르고 있습니다... 📖</div>
         
         <div class="book-grid" id="book-grid">
-            <!-- 목록이 이곳에 생성됩니다. -->
-        </div>
+            </div>
+
+        <div class="pagination" id="pagination">
+            </div>
     </div>
 
     <script>
+        // CSV 파싱 함수 (이전과 동일)
         function parseCSV(text) {
             const rows = [];
             let currentField = '';
@@ -271,21 +313,118 @@
             return rows;
         }
 
-        async function loadBooks() {
+        // 전체 도서 데이터를 저장할 배열
+        let booksArray = [];
+        let currentPage = 1;
+        const itemsPerPage = 10; // 이미지와 동일하게 10개씩 보여줍니다.
+
+        // 도서 데이터를 화면에 표시하는 함수
+        function displayBooks(page) {
             const grid = document.getElementById('book-grid');
+            grid.innerHTML = ''; // 기존 카드 제거
+
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const booksToDisplay = booksArray.slice(startIndex, endIndex);
+
+            booksToDisplay.forEach(book => {
+                // [적용] 카드 전체를 클릭 가능하게 만드는 <a> 태그
+                const cardLink = document.createElement('a');
+                cardLink.className = 'card-link';
+                cardLink.href = book.url || '#';
+                cardLink.target = '_blank'; // 새 탭에서 열기
+
+                cardLink.innerHTML = `
+                    <div class="book-card">
+                        <div class="recommender-info">
+                            <span><b>${book.name}</b> (${book.role})</span>
+                            <span>🏢 ${book.company}</span>
+                        </div>
+                        <div class="cover-area">
+                            <img src="${book.cover}" alt="${book.title} 표지" onerror="this.src='https://via.placeholder.com/150x220?text=No+Image'">
+                        </div>
+                        <div class="card-content">
+                            <div class="book-info">
+                                <h2>${book.title}</h2>
+                                <p class="quote-text">${book.reason}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(cardLink);
+            });
+
+            // 데이터 로드 후 그리드 표시 및 애니메이션 적용
+            grid.style.display = 'grid';
+            document.getElementById('loader').style.display = 'none';
+        }
+
+        // 페이지네이션 버튼을 생성하는 함수
+        function setupPagination(totalItems) {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = ''; // 기존 버튼 제거
+
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+            // 이전 버튼 (˂)
+            const prevButton = document.createElement('button');
+            prevButton.className = 'pagination-button';
+            prevButton.innerText = '˂';
+            prevButton.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayBooks(currentPage);
+                    setupPagination(totalItems);
+                }
+            };
+            pagination.appendChild(prevButton);
+
+            // 페이지 번호 버튼
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.className = `pagination-button ${currentPage === i ? 'active' : ''}`;
+                button.innerText = i;
+                button.onclick = () => {
+                    currentPage = i;
+                    displayBooks(currentPage);
+                    setupPagination(totalItems);
+                };
+                pagination.appendChild(button);
+            }
+
+            // 다음 버튼 (˃)
+            const nextButton = document.createElement('button');
+            nextButton.className = 'pagination-button';
+            nextButton.innerText = '˃';
+            nextButton.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    displayBooks(currentPage);
+                    setupPagination(totalItems);
+                }
+            };
+            pagination.appendChild(nextButton);
+        }
+
+        // 데이터를 로드하는 메인 함수
+        async function loadBooks() {
             const summary = document.getElementById('count-summary');
             const loader = document.getElementById('loader');
 
             try {
+                // CSV 파일 가져오기
                 const response = await fetch('423data.csv');
                 if (!response.ok) throw new Error('데이터 파일을 찾을 수 없습니다.');
                 
                 const csvText = await response.text();
                 const data = parseCSV(csvText);
 
+                // 헤더 제외 (첫 줄이 성명,소속... 일 경우)
                 const header = data[0];
                 const rows = data.slice(1);
 
+                // 컬럼 인덱스 매핑 (이전과 동일)
                 const idx = {
                     name: header.indexOf('성명'),
                     company: header.indexOf('소속'),
@@ -299,57 +438,38 @@
                     coverUrl: header.indexOf('표지 url')
                 };
 
-                loader.style.display = 'none';
                 summary.innerHTML = `현재 <strong>${rows.length}권</strong>의 빛나는 인생책이 모였습니다.`;
 
+                // 데이터를 배열에 저장
                 rows.forEach(row => {
+                    // 빈 줄 방지
                     if (row.length < 5) return;
 
-                    const book = {
+                    booksArray.push({
                         name: row[idx.displayName] || row[idx.name],
                         company: row[idx.company],
                         role: row[idx.role],
                         title: row[idx.bookTitle],
-                        author: row[idx.author],
-                        publisher: row[idx.publisher],
+                        author: row[idx.author], // 로드는 하지만 사용은 안 함
+                        publisher: row[idx.publisher], // 로드는 하지만 사용은 안 함
                         reason: row[idx.reason],
                         url: row[idx.bookUrl] || '#',
                         cover: row[idx.coverUrl] || 'https://via.placeholder.com/150x220?text=No+Cover'
-                    };
-
-                    const card = document.createElement('div');
-                    card.className = 'book-card';
-                    
-                    card.innerHTML = `
-                        <div class="cover-area">
-                            <img src="${book.cover}" alt="${book.title} 표지" onerror="this.src='https://via.placeholder.com/150x220?text=No+Image'">
-                        </div>
-                        <div class="card-content">
-                            <div class="recommender-info">
-                                <span><b>${book.name}</b> (${book.role})</span>
-                                <span>🏢 ${book.company}</span>
-                            </div>
-                            <div class="book-info">
-                                <h2><a href="${book.url}" target="_blank">${book.title}</a></h2>
-                                <div class="detail-row"><span class="label">✍️ 저자</span> ${book.author}</div>
-                                <div class="detail-row"><span class="label">🏛️ 출판</span> ${book.publisher}</div>
-                            </div>
-                            <div class="reason-box">
-                                <p class="quote-text">"${book.reason}"</p>
-                            </div>
-                        </div>
-                    `;
-                    
-                    grid.appendChild(card);
+                    });
                 });
+
+                // 첫 페이지 도서 표시 및 페이지네이션 설정
+                displayBooks(currentPage);
+                setupPagination(booksArray.length);
 
             } catch (error) {
                 console.error(error);
-                loader.innerHTML = `⚠️ 데이터를 불러오는 중 오류가 발생했습니다.`;
+                loader.innerHTML = `⚠️ 데이터를 불러오는 중 오류가 발생했습니다.<br><small>${error.message}</small>`;
                 summary.innerText = "데이터 로드 실패";
             }
         }
 
+        // 화면이 열릴 때 정보를 로드합니다.
         window.onload = loadBooks;
     </script>
 
