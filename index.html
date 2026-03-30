@@ -356,7 +356,7 @@
             grid.innerHTML = '';
             
             if (filteredBooks.length === 0) {
-                grid.innerHTML = `<div class="no-results">🌸 찾는 도서가 서재에 없는 것 같아요. 다른 검색어를 입력해 보세요.</div>`;
+                grid.innerHTML = `<div class="no-results">🌸 찾는 도서가 없는 것 같아요. 다른 검색어를 입력해 보세요.</div>`;
                 grid.style.display = 'grid';
                 document.getElementById('pagination').innerHTML = '';
                 return;
@@ -380,7 +380,7 @@
                         </div>
                         <div class="card-content">
                             <div class="book-info">
-                                <h2>📖 ${book.title}</h2>
+                                <h2> ${book.title}</h2>
                             </div>
                             <div class="reason-box">
                                 <p class="quote-text">💬 "${book.reason}"</p>
