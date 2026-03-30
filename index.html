@@ -76,7 +76,6 @@
             font-weight: 700;
         }
 
-        /* [검색 바 디자인] */
         .search-wrapper {
             max-width: 600px;
             margin: 0 auto 3.5rem auto;
@@ -93,7 +92,7 @@
             font-size: 1.1rem;
             font-family: 'Noto Sans KR', sans-serif;
             color: var(--text-main);
-            box-shadow: 0 10px 20px rgba(212, 129, 146, 0.05);
+            box-shadow: 0 10px 20px rgba(212, 146, 146, 0.05);
             transition: all 0.3s ease;
             box-sizing: border-box;
         }
@@ -151,44 +150,55 @@
             border-color: var(--cherry-pink);
         }
 
-        .book-area {
-            padding: 2.5rem 1.5rem 1.5rem 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.2rem;
-            background: linear-gradient(to bottom, var(--soft-pink), #FFFFFF);
-        }
-
+        /* [이미지 참고] 도서 표지 영역 (상단) */
         .cover-area {
             width: 100%;
-            height: 200px;
+            height: 240px;
             display: flex;
             justify-content: center;
             align-items: center;
+            background: linear-gradient(to bottom, var(--soft-pink), #FFFFFF);
+            padding: 2rem 0 1rem 0;
+            position: relative;
         }
 
         .cover-area img {
-            height: 100%;
+            height: 85%;
             width: auto;
             object-fit: contain;
-            box-shadow: 4px 8px 16px rgba(0,0,0,0.12);
+            box-shadow: 5px 12px 24px rgba(0,0,0,0.15);
             border-radius: 4px;
+            transition: transform 0.4s ease;
+        }
+
+        .book-card:hover .cover-area img {
+            transform: scale(1.05);
+        }
+
+        /* 카드 하단 정보 영역 */
+        .card-content {
+            padding: 1.5rem 1.8rem 2rem 1.8rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-info {
+            margin-bottom: 1.2rem;
+            text-align: center;
         }
 
         .book-info h2 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: #111;
-            text-align: center;
             line-height: 1.3;
             word-break: keep-all;
             font-weight: 800;
         }
 
+        /* [이미지 참고] 추천 이유 영역 */
         .reason-box {
-            padding: 1.8rem 1.5rem;
-            background-color: #FFFFFF;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
@@ -198,20 +208,22 @@
         .quote-text {
             margin: 0;
             line-height: 1.8;
-            color: #444;
+            color: #555;
             font-size: 1.05rem;
             text-align: justify;
             text-justify: inter-character;
             word-break: keep-all;
             font-family: 'Noto Sans KR', sans-serif;
             font-weight: 400;
+            position: relative;
         }
 
+        /* [이미지 참고] 추천인 코멘트 스타일 */
         .recommender-info {
             display: block;
             text-align: right;
-            margin-top: 1.2rem;
-            font-size: 0.9rem;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
             color: var(--deep-pink);
             font-weight: 600;
             font-family: 'Noto Sans KR', sans-serif;
@@ -262,7 +274,6 @@
         @media (max-width: 768px) {
             header h1 { font-size: 2.2rem; }
             .book-grid { grid-template-columns: 1fr; }
-            .search-input { font-size: 1rem; padding: 1rem 1.2rem; }
         }
     </style>
 </head>
@@ -270,7 +281,7 @@
 
     <header>
         <h1>🌸 출판인 PICK! 423권의 인생책</h1>
-        <p>이 책 안 본 사람 없게 해주세요 🙏 <br> 한국출판인회의가 함께하는 ‘세계 책의 날’, 출판인 423인의 인생책 큐레이션✨ </p>
+        <p>봄바람과 함께 전해지는 책 만드는 사람들의 한마디 ✨</p>
     </header>
 
     <div class="container">
@@ -278,20 +289,18 @@
             <div class="count-summary" id="count-summary">서재를 확인하고 있습니다...</div>
         </div>
 
-        <!-- [검색 바 추가] -->
         <div class="search-wrapper">
             <input type="text" id="search-input" class="search-input" placeholder="책 제목, 저자, 출판사를 검색해 보세요.">
             <span class="search-icon">🔍</span>
         </div>
         
-        <div id="loader">🌸 로딩중... 📖</div>
+        <div id="loader">🌸 423권의 보물을 하나씩 꺼내오는 중입니다... 📖</div>
         
         <div class="book-grid" id="book-grid"></div>
         <div class="pagination" id="pagination"></div>
     </div>
 
     <script>
-        // CSV 파서
         function parseCSV(text) {
             const result = [];
             let row = [];
@@ -337,12 +346,11 @@
             return result;
         }
 
-        let allBooks = []; // 전체 데이터
-        let filteredBooks = []; // 필터링된 데이터
+        let allBooks = []; 
+        let filteredBooks = []; 
         let currentPage = 1;
         const itemsPerPage = 12;
 
-        // 화면 표시 함수
         function displayBooks(page) {
             const grid = document.getElementById('book-grid');
             grid.innerHTML = '';
@@ -364,19 +372,20 @@
                 cardLink.href = book.url || '#';
                 cardLink.target = '_blank';
 
+                // [이미지 참고] 레이아웃 순서: 표지 -> 제목 -> 이유 -> 코멘트
                 cardLink.innerHTML = `
                     <div class="book-card">
-                        <div class="book-area">
-                            <div class="cover-area">
-                                <img src="${book.cover}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/150x220?text=No+Cover'">
-                            </div>
-                            <div class="book-info">
-                                <h2>${book.title}</h2>
-                            </div>
+                        <div class="cover-area">
+                            <img src="${book.cover}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/150x220?text=No+Cover'">
                         </div>
-                        <div class="reason-box">
-                            <p class="quote-text">"${book.reason}"</p>
-                            <span class="recommender-info">― ${book.name} 님(${book.company} ${book.role})</span>
+                        <div class="card-content">
+                            <div class="book-info">
+                                <h2>📖 ${book.title}</h2>
+                            </div>
+                            <div class="reason-box">
+                                <p class="quote-text">💬 "${book.reason}"</p>
+                                <span class="recommender-info">👤 ${book.name} 님 ✨<br>(${book.company} ${book.role})</span>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -387,7 +396,6 @@
             document.getElementById('loader').style.display = 'none';
         }
 
-        // 페이지네이션 생성 함수
         function setupPagination(totalItems) {
             const pagination = document.getElementById('pagination');
             pagination.innerHTML = '';
@@ -410,7 +418,6 @@
             }
         }
 
-        // 검색 처리 함수
         function handleSearch() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
             
@@ -429,7 +436,6 @@
             setupPagination(filteredBooks.length);
         }
 
-        // 데이터 로드 메인 함수
         async function loadBooks() {
             try {
                 const response = await fetch('423data.csv');
@@ -471,7 +477,6 @@
                 displayBooks(currentPage);
                 setupPagination(filteredBooks.length);
 
-                // 검색 바 이벤트 리스너 추가
                 document.getElementById('search-input').addEventListener('input', handleSearch);
 
             } catch (error) {
