@@ -4,25 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>출판인 PICK! 423권의 인생책</title>
-    <!-- 명조체와 고딕체를 함께 사용하여 책 느낌을 강조합니다 -->
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: #FDFBF7; /* 따뜻한 종이 질감의 배경색 */
+            background-color: #FDFBF7;
             color: #333;
             margin: 0;
             padding: 0;
         }
 
-        /* 제목 등에 사용될 명조체 폰트 */
         h1, h2, .quote-text {
             font-family: 'Gowun Batang', serif;
         }
 
         header {
-            background-color: #2C5F2D; /* 깊은 녹색 (서재 테마) */
-            color: #FFE77A; /* 부드러운 노란색 포인트 */
+            background-color: #2C5F2D;
+            color: #FFE77A;
             text-align: center;
             padding: 4rem 1rem;
             margin-bottom: 2rem;
@@ -121,7 +122,6 @@
             margin-right: 0.3rem;
         }
 
-        /* 추천 이유 말풍선 스타일 */
         .reason-box {
             margin-top: 1.5rem;
             background-color: #F9F7F1;
@@ -145,6 +145,13 @@
             color: #555;
             font-size: 1.05rem;
         }
+
+        .loading-message {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: #555;
+        }
     </style>
 </head>
 <body>
@@ -156,47 +163,60 @@
 
     <div class="container">
         <div class="count-summary" id="count-summary">
-            현재 0권의 빛나는 인생책이 모였습니다.
+            서재를 준비하고 있습니다...
         </div>
+        
+        <div id="loading" class="loading-message">
+            책장 끄트머리의 먼지를 털어내며 목록을 채우는 중입니다... 📖
+        </div>
+
         <div class="book-grid" id="book-grid">
-            <!-- 목록이 이곳에 생성됩니다. -->
-        </div>
+            </div>
     </div>
 
     <script>
-        // 이 부분에 423권의 정보를 양식에 맞게 채워 넣어주세요.
-        const books = [
-            {
-                company: "한국출판인회의",
-                role: "대리",
-                name: "이휘주",
-                bookTitle: "인생의 역사",
-                author: "신형철",
-                bookPublisher: "난다",
-                reason: "더 많은 시가 읽고 싶어지는 책. 시가 이렇게 가깝게, 따갑게 그리고 따뜻하게 느껴지던 때가 있었을까."
-            },
-            {
-                company: "달빛출판사",
-                role: "대표",
-                name: "이책방",
-                bookTitle: "밤의 도서관",
-                author: "알베르토 망겔",
-                bookPublisher: "세종서적",
-                reason: "밤이 되면 책들이 살아 숨 쉰다는 상상을 현실로 만들어주는 매력적인 에세이입니다. 책을 사랑하는 사람이라면 누구나 푹 빠질 수밖에 없습니다."
-            },
-            {
-                company: "나무와숲",
-                role: "마케팅팀장",
-                name: "박마켓",
-                bookTitle: "자기만의 방",
-                author: "버지니아 울프",
-                bookPublisher: "민음사",
-                reason: "수백 년 전의 글임에도 불구하고, 여전히 깊은 울림을 줍니다. 독립적인 사고와 공간의 중요성을 이토록 날카롭고 아름답게 표현한 책은 드뭅니다."
-            }
-            // 쉼표(,)로 구분하여 423권까지 계속 추가할 수 있습니다.
-        ];
+        // 화면이 열리면 CSV 파일을 읽어옵니다.
+        window.onload = function() {
+            Papa.parse("423data.csv", {
+                download: true,      // 외부 파일 가져오기
+                header: true,        // 첫 번째 줄을 각 항목의 이름표로 사용
+                skipEmptyLines: true, // 빈 줄은 무시하기
+                complete: function(results) {
+                    const rowList = results.data;
+                    const books = [];
 
-        function displayBooks() {
+                    rowList.forEach(row => {
+                        // 추천도서명이 비어있는 칸은 건너뜁니다
+                        if (!row['추천도서명']) return;
+
+                        // 표기명이 존재하면 표기명을, 없으면 성명을 사용합니다
+                        const displayName = (row['표기명'] && row['표기명'].trim() !== '') ? row['표기명'] : row['성명'];
+
+                        books.push({
+                            company: row['소속'] || '소속 미상',
+                            role: row['직책'] || '',
+                            name: displayName || '익명',
+                            bookTitle: row['추천도서명'] || '제목 없음',
+                            author: row['저자'] || '저자 미상',
+                            bookPublisher: row['출판사'] || '출판사 미상',
+                            reason: row['추천이유'] || '추천 이유가 생략되었습니다.'
+                        });
+                    });
+
+                    // 읽어오기가 끝나면 안내 문구를 숨깁니다
+                    document.getElementById('loading').style.display = 'none';
+                    
+                    // 완성된 목록을 화면에 그립니다
+                    displayBooks(books);
+                },
+                error: function(err) {
+                    console.error("파일을 읽어오는 중 문제가 발생했습니다:", err);
+                    document.getElementById('loading').innerText = "목록을 불러오지 못했습니다. 파일 이름이나 위치를 확인해주세요.";
+                }
+            });
+        };
+
+        function displayBooks(books) {
             const grid = document.getElementById('book-grid');
             const summary = document.getElementById('count-summary');
             
@@ -206,10 +226,13 @@
                 const card = document.createElement('div');
                 card.className = 'book-card';
                 
+                // 직책이 비어있지 않을 때만 괄호와 함께 표시합니다
+                const roleText = book.role.trim() !== '' ? `(${book.role})` : '';
+
                 card.innerHTML = `
                     <div class="recommender-info">
                         <span>🏢 ${book.company}</span> | 
-                        <span>👤 ${book.name} (${book.role})</span>
+                        <span>👤 ${book.name} ${roleText}</span>
                     </div>
                     <div class="book-info">
                         <h2>🔖 ${book.bookTitle}</h2>
@@ -224,9 +247,6 @@
                 grid.appendChild(card);
             });
         }
-
-        // 화면이 열릴 때 정보를 그립니다.
-        window.onload = displayBooks;
     </script>
 
 </body>
