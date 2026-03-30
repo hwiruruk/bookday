@@ -3,496 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>출판인 PICK! 423권의 인생책 - VIVID EDITION</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Noto+Serif+KR:wght@300;400;700&family=Lexend:wght@100;300;400;700&display=swap" rel="stylesheet">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    
+    <title>FAVOREAD - 최애의 독서</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            /* 비비드한 컬러 팔레트: 일렉트릭 블루, 마젠타, ब्राइट 옐로우 */
-            --bg-color: #fbfbfb;
-            --text-main: #000000;
-            --text-sub: #444444;
-            --accent-primary: #007bff; /* Electric Blue */
-            --accent-secondary: #ff00ff; /* Magenta */
-            --accent-tertiary: #ffee00; /* Bright Yellow */
-            
-            --card-bg: #ffffff;
-            --border-color: #eeeeee;
-            --badge-text: #ffffff;
-            --recommender-box-bg: #f4f4f4;
-            
-            /* 스며드는 효과를 위한 트랜지션 정의 */
-            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-        }
-
         body {
-            font-family: 'Lexend', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #FDFBF7; /* 따뜻한 배경색 유지 */
+            color: #333;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
-            letter-spacing: -0.01em;
         }
 
-        /* 날카로운 고딕과 묵직한 명조체의 파격적인 대조 */
-        header h1 {
-            font-family: 'Syncopate', sans-serif;
-            text-transform: uppercase;
-        }
-        
-        blockquote.quote-text, .book-title {
-            font-family: 'Noto Serif KR', serif;
-        }
-        
-        .count-badge, .source-title {
-            font-family: 'Syncopate', sans-serif;
+        h1, h2 {
+            font-family: 'Gowun Batang', serif;
         }
 
         header {
-            /* 역동적인 비비드 그라디언트 */
-            background: linear-gradient(135deg, #007bff 0%, #ff00ff 50%, #ffee00 100%);
-            background-size: 300% 300%;
-            color: #fff;
+            background-color: #2C5F2D; /* 녹색 테마 유지 */
+            color: #FFE77A;
             text-align: center;
-            padding: 7rem 1rem;
-            margin-bottom: 0;
-            position: relative;
-            animation: gradientShift 10s var(--ease-in-out) infinite, fadeIn 1s ease-out;
+            padding: 3rem 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 8px solid #97BC62;
         }
 
         header h1 {
-            margin: 0 0 1rem 0;
-            font-size: 3.5rem;
-            letter-spacing: 0.15em;
-            font-weight: 700;
-            color: var(--accent-tertiary);
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            margin: 0 0 0.5rem 0;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            color: #FFFFFF;
         }
 
         header p {
             margin: 0;
-            font-size: 1.3rem;
-            opacity: 0.95;
-            font-weight: 100;
-            color: #fff;
-            letter-spacing: 0.05em;
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
 
         .container {
-            max-width: 1500px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem 5rem 1rem;
+            padding: 0 1rem 3rem 1rem;
         }
 
         .count-summary {
-            text-align: center;
-            margin: -3rem auto 4rem auto;
-            font-size: 1.3rem;
-            color: var(--text-main);
-            background-color: var(--accent-tertiary); /* 비비드 옐로우 배지 */
-            padding: 1.5rem 3rem;
-            border-radius: 4px; /* 파격적인 각진 디자인 */
-            display: inline-block;
-            position: relative;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 15px 35px rgba(255, 238, 0, 0.4);
-            animation: fadeInDown 1s ease-out 0.5s both;
-            z-index: 10;
-            font-weight: 700;
+            text-align: right; /* 이전 버전처럼 우측 정렬 */
+            margin-bottom: 1rem;
+            color: #555;
+            font-weight: bold;
         }
 
-        .book-list {
+        .book-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 5rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
         }
 
-        /* 스며드는 애니메이션을 위한 컨테이너 */
-        .book-card-container {
-            opacity: 0;
-            transform: translateY(60px);
-            transition: opacity 1.2s var(--ease-in-out), transform 1.2s var(--ease-in-out);
-            will-change: transform, opacity;
-        }
-
-        .book-card-container.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .book-card-inner {
-            background-color: var(--card-bg);
-            border: 2px solid #000; /* 파격적인 굵은 블랙 테두리 */
-            padding: 0;
-            box-shadow: 15px 15px 0px rgba(0,0,0,1); /* 네오 브루탈리즘 스타일 그림자 */
-            display: flex;
-            flex-direction: row;
-            overflow: hidden;
-            transition: transform 0.3s var(--ease-in-out), box-shadow 0.3s var(--ease-in-out);
-        }
-
-        .book-card-inner:hover {
-            transform: translate(-5px, -5px);
-            box-shadow: 20px 20px 0px var(--accent-primary); /* 호버 시 블루 그림자로 변화 */
-        }
-
-        /* 왼쪽 텍스트 영역 */
-        .card-side.text-side {
-            flex: 1;
-            padding: 4rem;
+        .book-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E0DCD3;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border-top: 4px solid #97BC62;
             display: flex;
             flex-direction: column;
         }
 
-        .card-header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin-bottom: 2.5rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1.5rem;
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(44, 95, 45, 0.1);
         }
 
-        .count-badge {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--accent-secondary); /* 마젠타 */
-            line-height: 1;
+        .recommender-info {
+            border-bottom: 1px dashed #E0DCD3;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .recommender-section {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            text-align: right;
+        .recommender-info .badge {
+            display: inline-block;
+            background-color: #EFEBE0;
+            color: #2C5F2D;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
         }
 
-        .recommender-box {
-            background-color: var(--recommender-box-bg);
-            padding: 1rem 1.5rem;
-            border-radius: 4px;
-            color: var(--text-sub);
-            font-size: 0.95rem;
-            font-weight: 300;
-        }
-
-        .source {
-            color: var(--accent-primary); /* 블루 */
-            font-weight: 700;
-        }
-
-        .name {
-            color: var(--text-main);
-            font-weight: 700;
-        }
-
-        /* 핵심 내용인 추천 이유: 양쪽 정렬, 높이 맞춤 */
-        .reason-section {
-            flex-grow: 1;
-            display: flex;
-            align-items: flex-start; /* 상단 기준 정렬하여 높이 맞춤 */
-            margin-bottom: 3rem;
-            margin-top: 1rem;
-        }
-
-        blockquote.quote-text {
+        .recommender-info h3 {
             margin: 0;
-            font-size: 1.6rem;
-            line-height: 1.8;
-            color: var(--text-main);
-            font-weight: 300;
-            text-align: justify; /* 양쪽 정렬 */
-            text-align-last: center; /* 마지막 줄은 중앙 정렬 */
-            word-break: keep-all;
+            font-size: 1.1rem;
+            color: #2C3E50;
         }
 
-        /* 하단 상세 정보 블록 */
-        .source-details {
-            border-top: 1px solid var(--border-color);
-            padding-top: 2rem;
-            font-size: 0.9rem;
-            color: var(--text-sub);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-
-        .source-title {
+        .book-info h2 {
             margin: 0 0 0.5rem 0;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--accent-primary);
-            font-weight: 700;
+            font-size: 1.4rem;
+            color: #2C5F2D;
+            line-height: 1.4;
         }
 
-        .title-pub {
-            margin: 0;
-            font-weight: 300;
-            color: var(--text-main);
+        .book-info p {
+            margin: 0.3rem 0;
+            color: #555;
+            font-size: 0.95rem;
         }
 
-        /* 오른쪽 이미지 영역 */
-        .card-side.image-side {
-            width: 450px;
-            background-color: var(--text-main); /* 블랙 배경 */
-            color: #fff;
-            padding: 4rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+        .label {
+            font-weight: bold;
+            color: #888;
+            margin-right: 0.5rem;
         }
         
-        .card-side.image-side::before {
-            content:'';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(0, 123, 255, 0.2) 0%, rgba(255, 0, 255, 0.2) 100%);
-        }
-
-        .cover-wrapper {
-            position: relative;
-            margin-bottom: 3rem;
-            transition: transform 0.5s var(--ease-in-out);
-            z-index: 1;
-        }
-
-        .book-card-inner:hover .cover-wrapper {
-            transform: scale(1.03) rotate(1deg); /* 스며드는 회전 효과 */
-        }
-
-        .book-cover {
-            max-width: 100%;
-            height: auto;
-            border-radius: 2px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-
-        /* 책 정보: 요청대로 '저자:', '출판사:' 제거 */
-        .book-meta {
-            text-align: center;
-            width: 100%;
-            z-index: 1;
-        }
-
-        .book-title {
-            margin: 0 0 0.8rem 0;
-            font-size: 2rem;
-            color: #fff;
-            font-weight: 700;
-            word-break: keep-all;
-            line-height: 1.3;
-        }
-
-        .book-author {
-            margin: 0 0 2rem 0;
-            font-size: 1.2rem;
-            color: #fff;
-            opacity: 0.8;
-            font-weight: 100;
-        }
-
-        /* 표지 URL 표시 칸: 비비드 스타일 */
-        .cover-url-box {
-            width: 100%;
-            font-size: 0.8rem;
-            color: var(--text-main);
-            word-break: break-all;
-            padding: 1rem;
-            background-color: var(--accent-tertiary); /* 옐로우 배경 */
-            border-radius: 2px;
-            text-align: center;
-            z-index: 1;
-            font-weight: 700;
-        }
-
-        .url-label {
-            font-weight: 700;
-            color: var(--accent-secondary); /* 마젠타 */
-            margin-bottom: 0.3rem;
-            display: block;
-            text-transform: uppercase;
-        }
-
-        /* 애니메이션 효과 정의 */
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translate(-50%, -50px); }
-            to { opacity: 1; transform: translate(-50%, 0); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* 로딩 안내 문구 */
-        .loading-message {
-            text-align: center;
-            padding: 7rem;
-            font-size: 1.6rem;
-            color: var(--accent-secondary);
-            animation: fadeIn 1s infinite alternate;
-            font-family: 'Syncopate', sans-serif;
-            text-transform: uppercase;
-        }
-
-        /* 모바일 대응 */
-        @media (max-width: 1100px) {
-            .book-card-inner {
-                flex-direction: column-reverse;
-            }
-            .card-side.image-side {
-                width: 100%;
-                padding: 3rem;
-            }
-            .card-side.text-side {
-                padding: 3rem;
-            }
-            blockquote.quote-text {
-                font-size: 1.3rem;
-            }
-            header h1 {
-                font-size: 2.5rem;
-            }
+        .reason-text {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            font-size: 0.95rem;
+            color: #444;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>[423] LIFE BOOKS</h1>
-        <p>인생을 바꿀 단 한 권의 이야기 ✨</p>
+        <h1>FAVOREAD</h1>
+        <p>출판인들이 추천하는 423권의 최애 독서 목록</p>
     </header>
 
     <div class="container">
         <div class="count-summary" id="count-summary">
-            LOADING VIVID COLLECTION...
+            총 0권의 추천이 있습니다.
         </div>
-        
-        <div id="loading" class="loading-message">
-            끄트머리의 먼지를 털어내는 중입니다... 📖
+        <div class="book-grid" id="book-grid">
+            <!-- 책 목록이 이곳에 생성됩니다. -->
         </div>
-
-        <div class="book-list" id="book-grid">
-            </div>
     </div>
 
     <script>
-        window.onload = function() {
-            Papa.parse("423data.csv", {
-                download: true,
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    const rowList = results.data;
-                    const books = [];
+        // 이 부분에 423권의 정보를 양식에 맞게 채워 넣어주세요.
+        const books = [
+            {
+                company: "대한출판문화협회",
+                role: "사무국장",
+                name: "조희정",
+                bookTitle: "페스티나 렌테",
+                author: "알두스 마누티우스",
+                bookPublisher: "르네상스북스",
+                reason: "천천히, 그러나 쉬지 않고 나아가는 책 만들기의 본질을 일깨워주는 최고의 지침서입니다. 흔들릴 때마다 꺼내 읽는 저만의 나침반 같은 책이죠."
+            },
+            {
+                company: "달빛출판사",
+                role: "대표",
+                name: "이책방",
+                bookTitle: "밤의 도서관",
+                author: "알베르토 망겔",
+                bookPublisher: "세종서적",
+                reason: "밤이 되면 책들이 살아 숨 쉰다는 상상을 현실로 만들어주는 매력적인 에세이입니다. 책을 사랑하는 사람이라면 누구나 푹 빠질 수밖에 없습니다."
+            },
+            {
+                company: "나무와숲",
+                role: "마케팅팀장",
+                name: "박마켓",
+                bookTitle: "자기만의 방",
+                author: "버지니아 울프",
+                bookPublisher: "민음사",
+                reason: "수백 년 전의 글임에도 불구하고, 여전히 깊은 울림을 줍니다. 독립적인 사고와 공간의 중요성을 이토록 날카롭고 아름답게 표현한 책은 드뭅니다."
+            }
+            // 쉼표(,)로 구분하여 423권까지 계속 추가할 수 있습니다.
+        ];
 
-                    rowList.forEach(row => {
-                        if (!row['추천도서명']) return;
-
-                        const displayName = (row['표기명'] && row['표기명'].trim() !== '') ? row['표기명'] : row['성명'];
-
-                        books.push({
-                            company: row['소속'] || '소속 미상',
-                            role: row['직책'] || '',
-                            name: displayName || '익명',
-                            bookTitle: row['추천도서명'] || '제목 없음',
-                            author: row['저자'] || '저자 미상',
-                            bookPublisher: row['출판사'] || '출판사 미상',
-                            reason: row['추천이유'] || '추천 이유가 생략되었습니다.',
-                            // '표지URL'이라는 칸이 있다고 가정하고 가져옵니다.
-                            coverUrl: row['표지URL'] || 'https://via.placeholder.com/300x450.png?text=NO+COVER' 
-                        });
-                    });
-
-                    document.getElementById('loading').style.display = 'none';
-                    displayBooks(books);
-                },
-                error: function(err) {
-                    console.error("파일을 읽어오는 중 문제가 발생했습니다:", err);
-                    document.getElementById('loading').innerText = "목록을 불러오지 못했습니다. 파일 이름이나 위치를 확인해주세요.";
-                }
-            });
-        };
-
-        function displayBooks(books) {
+        function displayBooks() {
             const grid = document.getElementById('book-grid');
             const summary = document.getElementById('count-summary');
             
-            summary.innerHTML = `현재 <strong>${books.length}권</strong>의 인생책이 모였습니다.`;
+            summary.textContent = `총 ${books.length}권의 추천이 있습니다.`;
 
-            books.forEach((book, index) => {
-                const container = document.createElement('div');
-                container.className = 'book-card-container';
+            books.forEach(book => {
+                const card = document.createElement('div');
+                card.className = 'book-card';
                 
-                const roleText = book.role.trim() !== '' ? `(${book.role})` : '';
-                const countStr = (index + 1).toString().padStart(3, '0');
-
-                container.innerHTML = `
-                    <div class="book-card-inner">
-                        <div class="card-side text-side">
-                            <div class="card-header">
-                                <span class="count-badge">#${countStr}</span>
-                                <div class="recommender-section">
-                                    <div class="recommender-box">
-                                        <span class="source">${book.company}</span> | <span class="name">${book.name} ${roleText}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="reason-section">
-                                <blockquote class="quote-text">${book.reason}</blockquote>
-                            </div>
-                            <div class="source-details">
-                                <div>
-                                    <p class="source-title">Source: [423] THE COLLECTION</p>
-                                    <p class="title-pub">${book.bookTitle} | ${book.bookPublisher}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-side image-side">
-                            <div class="cover-wrapper">
-                                <img src="${book.coverUrl}" alt="${book.bookTitle} Cover" class="book-cover" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450.png?text=NO+COVER';">
-                            </div>
-                            <div class="book-meta">
-                                <h2 class="book-title">${book.bookTitle}</h2>
-                                <p class="book-author">${book.author}</p>
-                            </div>
-                            <div class="cover-url-box">
-                                <span class="url-label">Cover URL:</span>
-                                <code>${book.coverUrl}</code>
-                            </div>
+                card.innerHTML = `
+                    <div class="recommender-info">
+                        <span class="badge">추천인</span>
+                        <h3>${book.company} | ${book.role} | ${book.name}</h3>
+                    </div>
+                    <div class="book-info">
+                        <h2>${book.bookTitle}</h2>
+                        <p><span class="label">저자:</span> ${book.author}</p>
+                        <p><span class="label">출판사:</span> ${book.bookPublisher}</p>
+                        <div class="reason-text">
+                            <span class="label">추천 이유:</span> ${book.reason}
                         </div>
                     </div>
                 `;
                 
-                grid.appendChild(container);
-            });
-
-            // 스크롤 시 스며드는 애니메이션 효과
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.book-card-container').forEach((card) => {
-                observer.observe(card);
+                grid.appendChild(card);
             });
         }
+
+        // 화면이 열릴 때 정보를 그립니다.
+        window.onload = displayBooks;
     </script>
 
 </body>
