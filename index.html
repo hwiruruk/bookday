@@ -4,22 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>출판인 PICK! 423권의 인생책</title>
-    <!-- [폰트 임베딩] 명조체와 고딕체를 함께 가져옵니다 -->
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --cherry-pink: #FFB7C5; 
             --soft-pink: #FFF0F3;
             --deep-pink: #D48192;
-            --sky-blue: #E0F7FA;
             --bg-paper: #FFFBFC;
             --text-main: #333;
-            --text-muted: #777;
             --border-color: #F7E1E5;
         }
 
         body {
-            /* [서체] 기본은 고딕체(Noto Sans KR)로 설정하여 현대적인 느낌 유지 */
             font-family: 'Noto Sans KR', sans-serif;
             background-color: var(--bg-paper);
             color: var(--text-main);
@@ -29,7 +25,6 @@
             background-image: url('https://www.transparenttextures.com/patterns/pollen.png');
         }
 
-        /* [서체] 제목과 도서명 등 포인트는 명조체 적용 */
         h1, .book-info h2 {
             font-family: 'Nanum Myeongjo', serif;
         }
@@ -41,8 +36,6 @@
             padding: 6rem 1rem;
             margin-bottom: 2rem;
             border-bottom: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
         }
 
         header h1 {
@@ -50,16 +43,14 @@
             font-size: 3.2rem;
             color: var(--deep-pink);
             letter-spacing: -1px;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
             font-weight: 800;
         }
 
         header p {
             margin: 0;
             font-size: 1.3rem;
-            font-weight: 400;
-            color: #7A8B99;
             font-family: 'Gowun Batang', serif;
+            color: #7A8B99;
         }
 
         .container {
@@ -85,12 +76,12 @@
             font-weight: 700;
         }
 
-        /* [디자인] 카드 그리드 - 세로 길이 맞춤형 설정 */
+        /* [카드 높이 통일] grid-auto-rows: 1fr를 사용하여 모든 카드의 높이를 맞춥니다 */
         .book-grid {
             display: none;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            grid-auto-rows: 1fr;
             gap: 2.5rem;
-            /* [애니메이션] 부드럽게 나타나는 효과 */
             animation: fadeIn 0.6s ease-out forwards;
         }
 
@@ -102,21 +93,19 @@
         .card-link {
             text-decoration: none;
             color: inherit;
-            display: flex; /* 세로 길이 맞춤을 위해 flex 사용 */
+            display: flex;
         }
 
-        /* [디자인] 카드 본체 */
         .book-card {
             background-color: #FFFFFF;
             border: 1px solid var(--border-color);
             border-radius: 24px;
-            padding: 0;
             box-shadow: 0 10px 30px rgba(212, 129, 146, 0.05);
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            width: 100%; /* 부모 flex-link 내에서 꽉 차게 */
+            width: 100%;
         }
 
         .book-card:hover {
@@ -125,86 +114,79 @@
             border-color: var(--cherry-pink);
         }
 
-        /* [디자인] 코멘트 상단 헤더 (회사명/직책 중심) */
+        /* 상단 소속 정보 */
         .comment-header {
             background-color: var(--soft-pink);
-            padding: 1.2rem 1.5rem;
+            padding: 1rem 1.5rem;
             border-bottom: 1px solid #fdf0f2;
             color: var(--deep-pink);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         .comment-header b {
             font-weight: 700;
-            color: #E06C75; /* 포인트 색상 */
         }
 
-        /* [디자인] 추천 이유 - 양쪽 정렬 적용 */
+        /* [양쪽 정렬] 추천 이유 박스 */
         .reason-box {
             padding: 1.5rem;
             background-color: #FFF9FA;
             border-bottom: 1px dashed var(--border-color);
-            flex-grow: 0; /* 이유 길이에 따라 적절히 차지 */
         }
 
         .quote-text {
             margin: 0;
             line-height: 1.8;
-            color: #555;
+            color: #444;
             font-size: 1.05rem;
-            /* [중요] 양쪽 정렬 설정 */
-            text-align: justify;
+            text-align: justify; /* 양쪽 정렬 */
             text-justify: inter-character;
             word-break: keep-all;
         }
 
-        /* [디자인] 도서 정보 영역 */
+        .recommender-name {
+            display: block;
+            text-align: right;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--deep-pink);
+            font-weight: 600;
+        }
+
+        /* 도서 정보 영역 */
         .book-area {
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1.2rem;
-            flex-grow: 1; /* 남은 세로 공간을 채워 카드 높이 통일 */
-            justify-content: flex-end; /* 제목이 하단에 오도록 */
+            flex-grow: 1;
+            justify-content: center;
         }
 
         .cover-area {
             width: 100%;
-            height: 200px;
+            height: 180px;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
         }
 
         .cover-area img {
+            height: 100%;
             width: auto;
-            height: 90%;
             object-fit: contain;
-            box-shadow: 5px 10px 20px rgba(0,0,0,0.1);
-            transition: transform 0.4s ease;
-            border-radius: 4px;
-        }
-
-        .book-card:hover .cover-area img {
-            transform: scale(1.06);
-        }
-
-        .book-info {
-            text-align: center;
+            box-shadow: 4px 8px 16px rgba(0,0,0,0.1);
+            border-radius: 3px;
         }
 
         .book-info h2 {
             margin: 0;
-            font-size: 1.45rem;
+            font-size: 1.4rem;
             color: #111;
+            text-align: center;
             line-height: 1.3;
-            font-weight: 800;
             word-break: keep-all;
         }
 
@@ -216,7 +198,6 @@
             font-family: 'Gowun Batang', serif;
         }
 
-        /* [디자인] 페이지네이션 */
         .pagination {
             text-align: center;
             margin-top: 4.5rem;
@@ -232,21 +213,18 @@
             border: 1px solid var(--border-color);
             padding: 0.6rem 1.2rem;
             border-radius: 12px;
-            font-size: 0.95rem;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 600;
         }
 
-        .pagination-button:hover, .pagination-button.active {
+        .pagination-button.active {
             background-color: var(--deep-pink);
             color: white;
-            box-shadow: 0 4px 10px rgba(212, 129, 146, 0.2);
         }
 
         @media (max-width: 768px) {
             header h1 { font-size: 2.2rem; }
-            header p { font-size: 1.1rem; }
             .book-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -260,63 +238,65 @@
 
     <div class="container">
         <div class="summary-wrapper">
-            <div class="count-summary" id="count-summary">
-                서재의 문을 열고 있습니다...
-            </div>
+            <div class="count-summary" id="count-summary">서재를 확인하고 있습니다...</div>
         </div>
         
-        <div id="loader">🌸 벚꽃 흩날리는 서재에서 책을 고르고 있습니다... 📖</div>
+        <div id="loader">🌸 423권의 보물을 하나씩 꺼내오는 중입니다... 📖</div>
         
-        <div class="book-grid" id="book-grid">
-            <!-- 도서 카드가 생성되는 곳 -->
-        </div>
-
-        <div class="pagination" id="pagination">
-            <!-- 페이지네이션 버튼이 생성되는 곳 -->
-        </div>
+        <div class="book-grid" id="book-grid"></div>
+        <div class="pagination" id="pagination"></div>
     </div>
 
     <script>
+        // 더욱 강력한 CSV 파서 (따옴표 내 줄바꿈 지원)
         function parseCSV(text) {
-            const rows = [];
-            let currentField = '';
+            const result = [];
+            let row = [];
+            let field = '';
             let inQuotes = false;
-            let currentRow = [];
 
             for (let i = 0; i < text.length; i++) {
                 const char = text[i];
                 const nextChar = text[i + 1];
 
-                if (char === '"' && inQuotes && nextChar === '"') {
-                    currentField += '"';
-                    i++;
-                } else if (char === '"') {
-                    inQuotes = !inQuotes;
-                } else if (char === ',' && !inQuotes) {
-                    currentRow.push(currentField.trim());
-                    currentField = '';
-                } else if ((char === '\r' || char === '\n') && !inQuotes) {
-                    if (currentField || currentRow.length > 0) {
-                        currentRow.push(currentField.trim());
-                        rows.push(currentRow);
-                        currentField = '';
-                        currentRow = [];
+                if (inQuotes) {
+                    if (char === '"' && nextChar === '"') {
+                        field += '"';
+                        i++;
+                    } else if (char === '"') {
+                        inQuotes = false;
+                    } else {
+                        field += char;
                     }
-                    if (char === '\r' && nextChar === '\n') i++;
                 } else {
-                    currentField += char;
+                    if (char === '"') {
+                        inQuotes = true;
+                    } else if (char === ',') {
+                        row.push(field.trim());
+                        field = '';
+                    } else if (char === '\n' || char === '\r') {
+                        if (field || row.length > 0) {
+                            row.push(field.trim());
+                            result.push(row);
+                            field = '';
+                            row = [];
+                        }
+                        if (char === '\r' && nextChar === '\n') i++;
+                    } else {
+                        field += char;
+                    }
                 }
             }
-            if (currentField || currentRow.length > 0) {
-                currentRow.push(currentField.trim());
-                rows.push(currentRow);
+            if (field || row.length > 0) {
+                row.push(field.trim());
+                result.push(row);
             }
-            return rows;
+            return result;
         }
 
         let booksArray = [];
         let currentPage = 1;
-        const itemsPerPage = 12; // 3열 기준 12개씩
+        const itemsPerPage = 12;
 
         function displayBooks(page) {
             const grid = document.getElementById('book-grid');
@@ -335,14 +315,15 @@
                 cardLink.innerHTML = `
                     <div class="book-card">
                         <div class="comment-header">
-                            🏢 <b>${book.company}</b> · ${book.role} 💬
+                            🏢 <b>${book.company}</b> · ${book.role} ✨
                         </div>
                         <div class="reason-box">
-                            <p class="quote-text">${book.reason}</p>
+                            <p class="quote-text">"${book.reason}"</p>
+                            <span class="recommender-name">― ${book.name} 님</span>
                         </div>
                         <div class="book-area">
                             <div class="cover-area">
-                                <img src="${book.cover}" alt="${book.title} 표지" onerror="this.src='https://via.placeholder.com/150x220?text=No+Cover'">
+                                <img src="${book.cover}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/150x220?text=No+Cover'">
                             </div>
                             <div class="book-info">
                                 <h2>${book.title}</h2>
@@ -350,92 +331,77 @@
                         </div>
                     </div>
                 `;
-                
                 grid.appendChild(cardLink);
             });
 
             grid.style.display = 'grid';
             document.getElementById('loader').style.display = 'none';
-            window.scrollTo({ top: 400, behavior: 'smooth' }); // 페이지 이동 시 상단 이동
         }
 
         function setupPagination(totalItems) {
             const pagination = document.getElementById('pagination');
             pagination.innerHTML = '';
-
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             
-            // 페이지 범위를 현재 페이지 기준으로 일부만 표시하도록 개선
-            let startPage = Math.max(1, currentPage - 2);
-            let endPage = Math.min(totalPages, startPage + 4);
-            if (endPage === totalPages) startPage = Math.max(1, endPage - 4);
-
-            const addBtn = (label, targetPage, active = false) => {
+            for (let i = 1; i <= totalPages; i++) {
+                // 너무 많으면 현재 페이지 주변만 표시하는 로직이 필요할 수 있으나, 일단 모두 표시
                 const btn = document.createElement('button');
-                btn.className = `pagination-button ${active ? 'active' : ''}`;
-                btn.innerText = label;
-                btn.onclick = (e) => {
-                    e.preventDefault();
-                    currentPage = targetPage;
+                btn.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => {
+                    currentPage = i;
                     displayBooks(currentPage);
                     setupPagination(totalItems);
+                    window.scrollTo({ top: 400, behavior: 'smooth' });
                 };
                 pagination.appendChild(btn);
-            };
-
-            if (currentPage > 1) addBtn('˂', currentPage - 1);
-            for (let i = startPage; i <= endPage; i++) {
-                addBtn(i, i, i === currentPage);
             }
-            if (currentPage < totalPages) addBtn('˃', currentPage + 1);
         }
 
         async function loadBooks() {
-            const summary = document.getElementById('count-summary');
             try {
                 const response = await fetch('423data.csv');
-                if (!response.ok) throw new Error('파일을 찾을 수 없습니다.');
+                let csvText = await response.text();
                 
-                const csvText = await response.text();
+                // BOM 제거
+                csvText = csvText.replace(/^\uFEFF/, '');
+                
                 const data = parseCSV(csvText);
-                const header = data[0];
+                const header = data[0].map(h => h.trim()); // 헤더 공백 제거 중요
                 const rows = data.slice(1);
 
+                const getIdx = (name) => header.indexOf(name);
                 const idx = {
-                    company: header.indexOf('소속'),
-                    role: header.indexOf('직책'),
-                    name: header.indexOf('표기명'),
-                    bookTitle: header.indexOf('추천도서명'),
-                    reason: header.indexOf('추천이유'),
-                    bookUrl: header.indexOf('도서 url'),
-                    coverUrl: header.indexOf('표지 url')
+                    company: getIdx('소속'),
+                    role: getIdx('직책'),
+                    name: getIdx('표기명'),
+                    title: getIdx('추천도서명'),
+                    reason: getIdx('추천이유'),
+                    url: getIdx('도서 url'),
+                    cover: getIdx('표지 url')
                 };
 
-                summary.innerHTML = `현재 <strong>${rows.length}명</strong>의 출판인이 추천한 인생책이 모였습니다.`;
+                document.getElementById('count-summary').innerHTML = `현재 <strong>${rows.length}명</strong>의 추천이 모였습니다.`;
 
-                rows.forEach(row => {
-                    if (row.length < 5) return;
-                    booksArray.push({
-                        company: row[idx.company],
-                        role: row[idx.role],
-                        name: row[idx.name],
-                        title: row[idx.bookTitle],
-                        reason: row[idx.reason],
-                        url: row[idx.bookUrl] || '#',
-                        cover: row[idx.coverUrl] || 'https://via.placeholder.com/150x220?text=No+Cover'
-                    });
-                });
+                booksArray = rows.map(row => ({
+                    company: row[idx.company],
+                    role: row[idx.role],
+                    name: row[idx.name],
+                    title: row[idx.title],
+                    reason: row[idx.reason],
+                    url: row[idx.url],
+                    cover: row[idx.cover]
+                })).filter(b => b.title); // 제목이 있는 데이터만
 
                 displayBooks(currentPage);
                 setupPagination(booksArray.length);
 
             } catch (error) {
-                document.getElementById('loader').innerHTML = `⚠️ 데이터를 가져오는 중 오류가 발생했습니다.`;
+                document.getElementById('loader').innerHTML = `⚠️ 데이터를 로드하지 못했습니다.`;
             }
         }
 
         window.onload = loadBooks;
     </script>
-
 </body>
 </html>
