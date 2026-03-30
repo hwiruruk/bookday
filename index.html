@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>출판인 PICK! 423권의 인생책</title>
+    <!-- 명조체와 고딕체를 함께 사용하여 책 느낌을 강조합니다 -->
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #FDFBF7; /* 따뜻한 종이 질감의 배경색 */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 제목 등에 사용될 명조체 폰트 */
+        h1, h2, .quote-text {
+            font-family: 'Gowun Batang', serif;
+        }
+
+        header {
+            background-color: #2C5F2D; /* 깊은 녹색 (서재 테마) */
+            color: #FFE77A; /* 부드러운 노란색 포인트 */
+            text-align: center;
+            padding: 4rem 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 8px solid #97BC62;
+        }
+
+        header h1 {
+            margin: 0 0 1rem 0;
+            font-size: 2.8rem;
+            letter-spacing: 1px;
+            color: #FFFFFF;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem 4rem 1rem;
+        }
+
+        .count-summary {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            color: #555;
+            background-color: #EFEBE0;
+            padding: 1rem;
+            border-radius: 30px;
+            display: inline-block;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .book-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E0DCD3;
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(44, 95, 45, 0.1);
+            border-color: #97BC62;
+        }
+
+        .recommender-info {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px dashed #E0DCD3;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .recommender-info span {
+            margin-right: 0.5rem;
+        }
+
+        .book-info {
+            flex-grow: 1;
+        }
+
+        .book-info h2 {
+            margin: 0 0 0.8rem 0;
+            font-size: 1.6rem;
+            color: #2C5F2D;
+            line-height: 1.3;
+        }
+
+        .detail-row {
+            margin: 0.4rem 0;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        .label {
+            color: #888;
+            margin-right: 0.3rem;
+        }
+
+        /* 추천 이유 말풍선 스타일 */
+        .reason-box {
+            margin-top: 1.5rem;
+            background-color: #F9F7F1;
+            padding: 1.2rem;
+            border-radius: 0 12px 12px 12px;
+            position: relative;
+            border-left: 4px solid #FFE77A;
+        }
+
+        .reason-box::before {
+            content: '💬';
+            position: absolute;
+            top: -15px;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        .quote-text {
+            margin: 0;
+            line-height: 1.6;
+            color: #555;
+            font-size: 1.05rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>📚 출판인 PICK! 423권의 인생책</h1>
+        <p>책을 만드는 사람들이 직접 고르고 추천하는 단 한 권의 이야기 ✨</p>
+    </header>
+
+    <div class="container">
+        <div class="count-summary" id="count-summary">
+            현재 0권의 빛나는 인생책이 모였습니다.
+        </div>
+        <div class="book-grid" id="book-grid">
+            <!-- 목록이 이곳에 생성됩니다. -->
+        </div>
+    </div>
+
+    <script>
+        // 이 부분에 423권의 정보를 양식에 맞게 채워 넣어주세요.
+        const books = [
+            {
+                company: "한국출판인회의",
+                role: "대리",
+                name: "이휘주",
+                bookTitle: "인생의 역사",
+                author: "신형철",
+                bookPublisher: "난다",
+                reason: "더 많은 시가 읽고 싶어지는 책. 시가 이렇게 가깝게, 따갑게 그리고 따뜻하게 느껴지던 때가 있었을까."
+            },
+            {
+                company: "달빛출판사",
+                role: "대표",
+                name: "이책방",
+                bookTitle: "밤의 도서관",
+                author: "알베르토 망겔",
+                bookPublisher: "세종서적",
+                reason: "밤이 되면 책들이 살아 숨 쉰다는 상상을 현실로 만들어주는 매력적인 에세이입니다. 책을 사랑하는 사람이라면 누구나 푹 빠질 수밖에 없습니다."
+            },
+            {
+                company: "나무와숲",
+                role: "마케팅팀장",
+                name: "박마켓",
+                bookTitle: "자기만의 방",
+                author: "버지니아 울프",
+                bookPublisher: "민음사",
+                reason: "수백 년 전의 글임에도 불구하고, 여전히 깊은 울림을 줍니다. 독립적인 사고와 공간의 중요성을 이토록 날카롭고 아름답게 표현한 책은 드뭅니다."
+            }
+            // 쉼표(,)로 구분하여 423권까지 계속 추가할 수 있습니다.
+        ];
+
+        function displayBooks() {
+            const grid = document.getElementById('book-grid');
+            const summary = document.getElementById('count-summary');
+            
+            summary.innerHTML = `현재 <strong>${books.length}권</strong>의 빛나는 인생책이 모였습니다.`;
+
+            books.forEach(book => {
+                const card = document.createElement('div');
+                card.className = 'book-card';
+                
+                card.innerHTML = `
+                    <div class="recommender-info">
+                        <span>🏢 ${book.company}</span> | 
+                        <span>👤 ${book.name} (${book.role})</span>
+                    </div>
+                    <div class="book-info">
+                        <h2>🔖 ${book.bookTitle}</h2>
+                        <div class="detail-row"><span class="label">✍️ 저자:</span> ${book.author}</div>
+                        <div class="detail-row"><span class="label">🏛️ 출판사:</span> ${book.bookPublisher}</div>
+                    </div>
+                    <div class="reason-box">
+                        <p class="quote-text">${book.reason}</p>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // 화면이 열릴 때 정보를 그립니다.
+        window.onload = displayBooks;
+    </script>
+
+</body>
+</html>
