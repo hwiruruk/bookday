@@ -457,6 +457,69 @@
             letter-spacing: 0.1em;
         }
 
+        /* ── 출판사 그룹 ─────────────────── */
+        .publisher-list {
+            display: none;
+            flex-direction: column;
+            gap: 3rem;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .publisher-section {
+            border-top: 3px solid var(--ink-blue);
+            padding-top: 1.2rem;
+        }
+
+        .publisher-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .publisher-name {
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--ink-blue);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin: 0;
+        }
+
+        .publisher-name .by {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-sub);
+            margin-right: 0.6rem;
+            letter-spacing: 0.1em;
+        }
+
+        .publisher-meta {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            color: var(--ink-blue);
+        }
+
+        .publisher-meta .dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--electric-blue);
+            margin: 0 0.5rem 0.1rem;
+            vertical-align: middle;
+        }
+
+        .publisher-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.2rem;
+        }
+
         .pagination {
             text-align: center;
             margin-top: 4rem;
@@ -513,7 +576,8 @@
             header { padding: 2.5rem 1.2rem 2rem; }
             header h1 { font-size: 2.4rem; }
             .top-bar { font-size: 0.7rem; }
-            .book-grid { grid-template-columns: 1fr; }
+            .publisher-grid { grid-template-columns: 1fr; }
+            .publisher-name { font-size: 1.6rem; }
             .header-meta { flex-direction: column; align-items: flex-start; }
             .issue-no { text-align: left; }
         }
@@ -568,7 +632,7 @@
 
         <div id="loader">[ LOADING BOOKS ··· ]</div>
 
-        <div class="book-grid" id="book-grid"></div>
+        <div class="publisher-list" id="publisher-list"></div>
         <div class="pagination" id="pagination"></div>
     </div>
 
@@ -630,42 +694,21 @@
         }
 
         let allBooks = [];
-        let filteredBooks = [];
+        let filteredGroups = [];
         let currentPage = 1;
         let currentFilter = 'ALL';
-        const itemsPerPage = 12;
+        const publishersPerPage = 6;
 
         function pad(n) { return String(n).padStart(3, '0'); }
 
-        function displayBooks(page) {
-            const grid = document.getElementById('book-grid');
-            grid.innerHTML = '';
+        function buildCard(book) {
+            const isOur = book.type === '우리책';
+            const badgeClass = isOur ? 'our' : 'good';
+            const badgeText = isOur ? '우리 책 · 자사' : '좋은 책 · 타사';
 
-            if (filteredBooks.length === 0) {
-                grid.innerHTML = `<div class="no-results">— 일치하는 책이 없습니다. 다른 키워드를 시도해 보세요 —</div>`;
-                grid.style.display = 'grid';
-                document.getElementById('pagination').innerHTML = '';
-                return;
-            }
-
-            const startIndex = (page - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const booksToDisplay = filteredBooks.slice(startIndex, endIndex);
-
-            booksToDisplay.forEach((book, i) => {
-                const cardLink = document.createElement('a');
-                cardLink.className = 'card-link';
-                cardLink.href = book.url || '#';
-                cardLink.target = '_blank';
-
-                const number = pad(startIndex + i + 1);
-                const isOur = book.type === '우리책';
-                const badgeClass = isOur ? 'our' : 'good';
-                const badgeText = isOur ? '우리 책 · 자사' : '좋은 책 · 타사';
-
-                cardLink.innerHTML = `
+            return `
+                <a class="card-link" href="${book.url || '#'}" target="_blank">
                     <div class="book-card">
-                        <div class="card-number">NO. ${number}</div>
                         <div class="type-badge ${badgeClass}">${badgeText}</div>
                         <div class="cover-area">
                             <img src="${book.cover}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/150x220?text=No+Cover'">
@@ -684,18 +727,71 @@
                             </div>
                         </div>
                     </div>
+                </a>
+            `;
+        }
+
+        function groupByPublisher(books) {
+            const map = new Map();
+            for (const b of books) {
+                const key = b.company || '미지정';
+                if (!map.has(key)) map.set(key, []);
+                map.get(key).push(b);
+            }
+            return [...map.entries()].map(([company, items]) => {
+                items.sort((a, b) => {
+                    if (a.type === b.type) return 0;
+                    return a.type === '우리책' ? -1 : 1;
+                });
+                return { company, items };
+            });
+        }
+
+        function displayGroups(page) {
+            const list = document.getElementById('publisher-list');
+            list.innerHTML = '';
+
+            if (filteredGroups.length === 0) {
+                list.innerHTML = `<div class="no-results">— 일치하는 책이 없습니다. 다른 키워드를 시도해 보세요 —</div>`;
+                list.style.display = 'flex';
+                document.getElementById('pagination').innerHTML = '';
+                document.getElementById('loader').style.display = 'none';
+                return;
+            }
+
+            const startIndex = (page - 1) * publishersPerPage;
+            const endIndex = startIndex + publishersPerPage;
+            const groupsToDisplay = filteredGroups.slice(startIndex, endIndex);
+
+            groupsToDisplay.forEach((group, i) => {
+                const ourN = group.items.filter(b => b.type === '우리책').length;
+                const goodN = group.items.filter(b => b.type === '좋은책').length;
+                const no = pad(startIndex + i + 1);
+
+                const section = document.createElement('section');
+                section.className = 'publisher-section';
+                section.innerHTML = `
+                    <div class="publisher-header">
+                        <h2 class="publisher-name"><span class="by">PUB ${no}</span>${group.company}</h2>
+                        <div class="publisher-meta">
+                            우리 책 ${ourN}<span class="dot"></span>좋은 책 ${goodN}
+                        </div>
+                    </div>
+                    <div class="publisher-grid">
+                        ${group.items.map(buildCard).join('')}
+                    </div>
                 `;
-                grid.appendChild(cardLink);
+                list.appendChild(section);
             });
 
-            grid.style.display = 'grid';
+            list.style.display = 'flex';
             document.getElementById('loader').style.display = 'none';
         }
 
         function setupPagination(totalItems) {
             const pagination = document.getElementById('pagination');
             pagination.innerHTML = '';
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const totalPages = Math.ceil(totalItems / publishersPerPage);
 
             if (totalPages <= 1) return;
 
@@ -705,7 +801,7 @@
                 btn.innerText = pad(i).slice(-2);
                 btn.onclick = () => {
                     currentPage = i;
-                    displayBooks(currentPage);
+                    displayGroups(currentPage);
                     setupPagination(totalItems);
                     const containerTop = document.querySelector('.summary-wrapper').offsetTop;
                     window.scrollTo({ top: containerTop - 20, behavior: 'smooth' });
@@ -717,24 +813,25 @@
         function applyFilters() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
 
-            let result = [...allBooks];
+            let books = [...allBooks];
 
             if (currentFilter !== 'ALL') {
-                result = result.filter(b => b.type === currentFilter);
+                books = books.filter(b => b.type === currentFilter);
             }
 
             if (query !== "") {
-                result = result.filter(book =>
+                books = books.filter(book =>
                     book.title.toLowerCase().includes(query) ||
                     book.author.toLowerCase().includes(query) ||
-                    book.publisher.toLowerCase().includes(query)
+                    book.publisher.toLowerCase().includes(query) ||
+                    book.company.toLowerCase().includes(query)
                 );
             }
 
-            filteredBooks = result;
+            filteredGroups = groupByPublisher(books);
             currentPage = 1;
-            displayBooks(currentPage);
-            setupPagination(filteredBooks.length);
+            displayGroups(currentPage);
+            setupPagination(filteredGroups.length);
         }
 
         function handleSearch() { applyFilters(); }
@@ -780,12 +877,13 @@
 
                 const ourCount = allBooks.filter(b => b.type === '우리책').length;
                 const goodCount = allBooks.filter(b => b.type === '좋은책').length;
+                const publisherCount = new Set(allBooks.map(b => b.company)).size;
                 document.getElementById('count-summary').innerHTML =
-                    `TOTAL <strong>${allBooks.length}</strong> PICKS · 우리 책 ${ourCount} / 좋은 책 ${goodCount}`;
+                    `<strong>${publisherCount}</strong> 회원사 · 우리 책 ${ourCount} / 좋은 책 ${goodCount}`;
 
-                filteredBooks = [...allBooks];
-                displayBooks(currentPage);
-                setupPagination(filteredBooks.length);
+                filteredGroups = groupByPublisher(allBooks);
+                displayGroups(currentPage);
+                setupPagination(filteredGroups.length);
 
                 document.getElementById('search-input').addEventListener('input', handleSearch);
 
