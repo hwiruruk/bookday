@@ -4,119 +4,229 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>세계 책의 날 4.23, 출판인 PICK 인생책</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --cherry-pink: #FFB7C5; 
-            --soft-pink: #FFF0F3;
-            --deep-pink: #D48192;
-            --bg-paper: #FFFBFC;
-            --text-main: #333;
-            --border-color: #F7E1E5;
+            --ink-blue: #0A1F66;
+            --electric-blue: #1F3FFF;
+            --sky-blue: #6E8CFF;
+            --pale-blue: #E6ECFF;
+            --paper: #F4F1EA;
+            --paper-deep: #ECE7DA;
+            --text-main: #0A1F66;
+            --text-sub: #4A5680;
+            --line: #0A1F66;
         }
 
+        * { box-sizing: border-box; }
+
         body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: var(--bg-paper);
+            font-family: 'IBM Plex Sans KR', sans-serif;
+            background-color: var(--paper);
             color: var(--text-main);
             margin: 0;
             padding: 0;
             line-height: 1.6;
-            background-image: url('https://www.transparenttextures.com/patterns/pollen.png');
+            background-image:
+                repeating-linear-gradient(0deg, rgba(10,31,102,0.04) 0 1px, transparent 1px 28px);
         }
 
-        h1, .book-info h2 {
+        h1, h2, .serif {
             font-family: 'Nanum Myeongjo', serif;
         }
 
+        .mono {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* ── 헤더: 큰 타이포 + 굵은 라인 ─────────────────── */
         header {
-            background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
-            color: #5D5D5D;
-            text-align: center;
-            padding: 6rem 1rem;
+            background: var(--paper);
+            color: var(--ink-blue);
+            padding: 3.5rem 1.5rem 2.5rem;
+            border-bottom: 3px solid var(--ink-blue);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--ink-blue);
             margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .top-bar .badge {
+            background: var(--ink-blue);
+            color: var(--paper);
+            padding: 0.25rem 0.7rem;
+            border-radius: 2px;
         }
 
         header h1 {
-            margin: 0 0 1.2rem 0;
-            font-size: 3.2rem;
-            color: var(--deep-pink);
-            letter-spacing: -1px;
+            margin: 0 0 1.5rem 0;
+            font-size: clamp(2.4rem, 6vw, 5rem);
+            color: var(--ink-blue);
+            letter-spacing: -0.03em;
+            font-weight: 800;
+            line-height: 1.05;
+        }
+
+        header h1 .accent {
+            font-style: italic;
+            color: var(--electric-blue);
             font-weight: 800;
         }
 
-        header p {
-            margin: 0;
-            font-size: 1.3rem;
-            font-family: 'Gowun Batang', serif;
-            color: #7A8B99;
+        header h1 .stamp {
+            display: inline-block;
+            background: var(--ink-blue);
+            color: var(--paper);
+            padding: 0 0.4rem;
+            transform: rotate(-2deg);
+            font-style: normal;
         }
 
+        .header-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        header p.tagline {
+            margin: 0;
+            font-size: 1.15rem;
+            font-family: 'Nanum Myeongjo', serif;
+            color: var(--text-sub);
+            max-width: 560px;
+            line-height: 1.5;
+        }
+
+        .issue-no {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--ink-blue);
+            text-align: right;
+            line-height: 1.4;
+            white-space: nowrap;
+        }
+
+        .issue-no strong {
+            display: block;
+            font-size: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        /* ── 컨테이너 ─────────────────── */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1.5rem 5rem 1.5rem;
+            padding: 3rem 1.5rem 5rem 1.5rem;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            color: var(--ink-blue);
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-label::before,
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--ink-blue);
         }
 
         .summary-wrapper {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .count-summary {
-            background-color: white;
-            padding: 0.8rem 2.5rem;
-            border-radius: 50px;
+            background-color: var(--ink-blue);
+            padding: 0.7rem 2rem;
             display: inline-block;
-            font-size: 1.1rem;
-            color: var(--deep-pink);
-            box-shadow: 0 4px 15px rgba(255, 183, 197, 0.2);
-            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            color: var(--paper);
+            font-family: 'IBM Plex Mono', monospace;
+            letter-spacing: 0.05em;
+            border-radius: 2px;
+        }
+
+        .count-summary strong {
+            color: #FFE45C;
             font-weight: 700;
         }
 
         .search-wrapper {
-            max-width: 600px;
+            max-width: 720px;
             margin: 0 auto 3.5rem auto;
             position: relative;
+            border: 2px solid var(--ink-blue);
+            background: #fff;
         }
 
         .search-input {
             width: 100%;
-            padding: 1.2rem 1.5rem;
+            padding: 1.1rem 1.4rem;
             padding-right: 4rem;
-            border-radius: 40px;
-            border: 2px solid var(--border-color);
-            background-color: white;
-            font-size: 1.1rem;
-            font-family: 'Noto Sans KR', sans-serif;
-            color: var(--text-main);
-            box-shadow: 0 10px 20px rgba(212, 146, 146, 0.05);
-            transition: all 0.3s ease;
-            box-sizing: border-box;
+            border: none;
+            background-color: transparent;
+            font-size: 1.05rem;
+            font-family: 'IBM Plex Sans KR', sans-serif;
+            color: var(--ink-blue);
+            font-weight: 500;
+        }
+
+        .search-input::placeholder {
+            color: var(--sky-blue);
+            font-weight: 400;
         }
 
         .search-input:focus {
             outline: none;
-            border-color: var(--cherry-pink);
-            box-shadow: 0 10px 25px rgba(212, 129, 146, 0.15);
+            background: var(--pale-blue);
         }
 
         .search-icon {
             position: absolute;
-            right: 1.5rem;
+            right: 1.2rem;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 1.4rem;
-            color: var(--cherry-pink);
-            cursor: pointer;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            color: var(--ink-blue);
+            font-weight: 700;
+            pointer-events: none;
         }
 
+        /* ── 도서 그리드: 잡지/zine 카드 ─────────────────── */
         .book-grid {
             display: none;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 2.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.2rem;
             animation: fadeIn 0.6s ease-out forwards;
         }
 
@@ -133,74 +243,103 @@
 
         .book-card {
             background-color: #FFFFFF;
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(212, 129, 146, 0.05);
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 2px solid var(--ink-blue);
+            border-radius: 0;
+            box-shadow: 6px 6px 0 var(--ink-blue);
+            transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             width: 100%;
+            position: relative;
         }
 
         .book-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 25px 50px rgba(212, 129, 146, 0.15);
-            border-color: var(--cherry-pink);
+            transform: translate(-3px, -3px);
+            box-shadow: 9px 9px 0 var(--electric-blue);
+            background: var(--pale-blue);
+        }
+
+        .card-number {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: var(--ink-blue);
+            color: var(--paper);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            padding: 0.3rem 0.7rem;
+            z-index: 2;
         }
 
         .cover-area {
             width: 100%;
-            height: 240px;
+            height: 260px;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(to bottom, var(--soft-pink), #FFFFFF);
-            padding: 2rem 0 1rem 0;
+            background:
+                linear-gradient(to bottom, var(--pale-blue) 0%, #fff 100%);
+            padding: 2rem 0 1.2rem 0;
             position: relative;
+            border-bottom: 2px solid var(--ink-blue);
+        }
+
+        .cover-area::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(0deg, rgba(10,31,102,0.05) 0 1px, transparent 1px 4px);
+            pointer-events: none;
         }
 
         .cover-area img {
-            height: 85%;
+            height: 88%;
             width: auto;
             object-fit: contain;
-            box-shadow: 5px 12px 24px rgba(0,0,0,0.15);
-            border-radius: 4px;
-            transition: transform 0.4s ease;
+            box-shadow: 4px 6px 0 var(--ink-blue);
+            border-radius: 0;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 1;
         }
 
         .book-card:hover .cover-area img {
-            transform: scale(1.05);
+            transform: rotate(-1.5deg) scale(1.03);
         }
 
         .card-content {
-            padding: 1.5rem 1.8rem 2rem 1.8rem;
+            padding: 1.4rem 1.5rem 1.6rem 1.5rem;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
 
         .book-info {
-            margin-bottom: 1.2rem;
-            text-align: center;
+            margin-bottom: 1.1rem;
+            text-align: left;
+            border-bottom: 1px dashed var(--ink-blue);
+            padding-bottom: 1rem;
         }
 
         .book-info h2 {
             margin: 0;
-            font-size: 1.6rem;
-            color: #111;
-            line-height: 1.3;
+            font-size: 1.55rem;
+            color: var(--ink-blue);
+            line-height: 1.25;
             word-break: keep-all;
             font-weight: 800;
+            letter-spacing: -0.02em;
         }
 
-        /* 책 제목 하단의 저자 | 출판사 정보 스타일 */
         .book-metadata {
-            margin-top: 0.4rem;
-            font-size: 0.9rem;
-            color: #888;
-            font-family: 'Noto Sans KR', sans-serif;
-            font-weight: 400;
+            margin-top: 0.5rem;
+            font-size: 0.82rem;
+            color: var(--text-sub);
+            font-family: 'IBM Plex Mono', monospace;
+            letter-spacing: 0.02em;
         }
 
         .reason-box {
@@ -212,97 +351,167 @@
 
         .quote-text {
             margin: 0;
-            line-height: 1.8;
-            color: #555;
-            font-size: 1.05rem;
-            text-align: justify;
-            text-justify: inter-character;
+            line-height: 1.75;
+            color: var(--text-main);
+            font-size: 1rem;
+            text-align: left;
             word-break: keep-all;
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'Nanum Myeongjo', serif;
             font-weight: 400;
             position: relative;
+            padding-left: 0.8rem;
+            border-left: 3px solid var(--electric-blue);
         }
 
         .recommender-info {
             display: block;
             text-align: right;
-            margin-top: 1.5rem;
-            font-size: 0.95rem;
-            color: var(--deep-pink);
+            margin-top: 1.3rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--ink-blue);
+            font-size: 0.85rem;
+            color: var(--ink-blue);
             font-weight: 600;
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'IBM Plex Sans KR', sans-serif;
+            letter-spacing: 0.02em;
+        }
+
+        .recommender-info .pickr {
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .recommender-info .affil {
+            display: block;
+            margin-top: 0.2rem;
+            color: var(--text-sub);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.04em;
         }
 
         #loader {
             text-align: center;
             padding: 60px;
-            font-size: 1.2rem;
-            color: var(--deep-pink);
-            font-family: 'Gowun Batang', serif;
+            font-size: 1rem;
+            color: var(--ink-blue);
+            font-family: 'IBM Plex Mono', monospace;
+            letter-spacing: 0.1em;
         }
 
         .pagination {
             text-align: center;
-            margin-top: 4.5rem;
+            margin-top: 4rem;
             display: flex;
             justify-content: center;
-            gap: 0.6rem;
+            gap: 0.4rem;
             flex-wrap: wrap;
         }
 
         .pagination-button {
-            background-color: white;
-            color: var(--deep-pink);
-            border: 1px solid var(--border-color);
-            padding: 0.6rem 1.2rem;
-            border-radius: 12px;
+            background-color: var(--paper);
+            color: var(--ink-blue);
+            border: 2px solid var(--ink-blue);
+            padding: 0.55rem 1rem;
+            border-radius: 0;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
+            transition: all 0.15s;
+            font-weight: 700;
+            font-family: 'IBM Plex Mono', monospace;
+            min-width: 42px;
+        }
+
+        .pagination-button:hover {
+            background: var(--pale-blue);
         }
 
         .pagination-button.active {
-            background-color: var(--deep-pink);
-            color: white;
+            background-color: var(--ink-blue);
+            color: var(--paper);
         }
 
         .no-results {
             text-align: center;
             grid-column: 1 / -1;
             padding: 4rem;
-            font-size: 1.2rem;
-            color: #8E8E8E;
-            font-family: 'Gowun Batang', serif;
+            font-size: 1.1rem;
+            color: var(--text-sub);
+            font-family: 'Nanum Myeongjo', serif;
+            border: 2px dashed var(--ink-blue);
+        }
+
+        footer {
+            border-top: 3px solid var(--ink-blue);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            color: var(--ink-blue);
+            background: var(--paper);
         }
 
         @media (max-width: 768px) {
-            header h1 { font-size: 2.2rem; }
+            header { padding: 2.5rem 1.2rem 2rem; }
+            header h1 { font-size: 2.4rem; }
+            .top-bar { font-size: 0.7rem; }
             .book-grid { grid-template-columns: 1fr; }
+            .header-meta { flex-direction: column; align-items: flex-start; }
+            .issue-no { text-align: left; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🌸 세계 책의 날 4.23, 출판인 PICK 인생책</h1>
-        <p>이 책 안 본 사람 없게 해주세요 🙏 <br> 한국출판인회의가 함께하는 ‘세계 책의 날’, 출판인의 인생책 큐레이션✨</p>
+        <div class="header-inner">
+            <div class="top-bar">
+                <span><span class="badge">VOL. 04</span> &nbsp;&nbsp; WORLD BOOK DAY × KPC</span>
+                <span class="mono">2026 / EDITION 03</span>
+            </div>
+
+            <h1>
+                읽는 사람만<br>
+                아는 <span class="accent">기쁨</span>이<br>
+                <span class="stamp">있다.</span>
+            </h1>
+
+            <div class="header-meta">
+                <p class="tagline">
+                    세계 책의 날 <strong>4.23</strong>, 한국출판인회의가 함께하는 출판인의 인생책 큐레이션 —
+                    오늘의 청년 독자에게 건네는 한 권.
+                </p>
+                <div class="issue-no">
+                    NO.<strong>04 / 23</strong>
+                    READING ISSUE
+                </div>
+            </div>
+        </div>
     </header>
 
     <div class="container">
+        <div class="section-label">CURATED PICKS / 출판인의 인생책</div>
+
         <div class="summary-wrapper">
-            <div class="count-summary" id="count-summary">로딩중...</div>
+            <div class="count-summary" id="count-summary">LOADING ···</div>
         </div>
 
         <div class="search-wrapper">
-            <input type="text" id="search-input" class="search-input" placeholder="책 제목, 저자, 출판사를 검색해 보세요.">
-            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input" placeholder="책 제목·저자·출판사로 검색">
+            <span class="search-icon">SEARCH →</span>
         </div>
-        
-        <div id="loader">🌸 로딩중... 📖</div>
-        
+
+        <div id="loader">[ LOADING BOOKS ··· ]</div>
+
         <div class="book-grid" id="book-grid"></div>
         <div class="pagination" id="pagination"></div>
     </div>
+
+    <footer>
+        © 2026 한국출판인회의 · WORLD BOOK DAY 4.23
+    </footer>
 
     <script>
         function parseCSV(text) {
@@ -357,17 +566,19 @@
             }
         }
 
-        let allBooks = []; 
-        let filteredBooks = []; 
+        let allBooks = [];
+        let filteredBooks = [];
         let currentPage = 1;
         const itemsPerPage = 12;
+
+        function pad(n) { return String(n).padStart(3, '0'); }
 
         function displayBooks(page) {
             const grid = document.getElementById('book-grid');
             grid.innerHTML = '';
-            
+
             if (filteredBooks.length === 0) {
-                grid.innerHTML = `<div class="no-results">🌸 찾는 도서가 없는 것 같아요. 다른 검색어를 입력해 보세요.</div>`;
+                grid.innerHTML = `<div class="no-results">— 일치하는 책이 없습니다. 다른 키워드를 시도해 보세요 —</div>`;
                 grid.style.display = 'grid';
                 document.getElementById('pagination').innerHTML = '';
                 return;
@@ -377,25 +588,31 @@
             const endIndex = startIndex + itemsPerPage;
             const booksToDisplay = filteredBooks.slice(startIndex, endIndex);
 
-            booksToDisplay.forEach(book => {
+            booksToDisplay.forEach((book, i) => {
                 const cardLink = document.createElement('a');
                 cardLink.className = 'card-link';
                 cardLink.href = book.url || '#';
                 cardLink.target = '_blank';
 
+                const number = pad(startIndex + i + 1);
+
                 cardLink.innerHTML = `
                     <div class="book-card">
+                        <div class="card-number">NO. ${number}</div>
                         <div class="cover-area">
                             <img src="${book.cover}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/150x220?text=No+Cover'">
                         </div>
                         <div class="card-content">
                             <div class="book-info">
-                                <h2> ${book.title}</h2>
-                                <div class="book-metadata">${book.author} | ${book.publisher}</div>
+                                <h2>${book.title}</h2>
+                                <div class="book-metadata">${book.author} · ${book.publisher}</div>
                             </div>
                             <div class="reason-box">
-                                <p class="quote-text">💬 "${book.reason}"</p>
-                                <span class="recommender-info">👤 ${book.name} 님 ✨<br>(${book.company} ${book.role})</span>
+                                <p class="quote-text">${book.reason}</p>
+                                <span class="recommender-info">
+                                    PICK BY <span class="pickr">${book.name}</span>
+                                    <span class="affil">${book.company} · ${book.role}</span>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -411,13 +628,13 @@
             const pagination = document.getElementById('pagination');
             pagination.innerHTML = '';
             const totalPages = Math.ceil(totalItems / itemsPerPage);
-            
+
             if (totalPages <= 1) return;
 
             for (let i = 1; i <= totalPages; i++) {
                 const btn = document.createElement('button');
                 btn.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
-                btn.innerText = i;
+                btn.innerText = pad(i).slice(-2);
                 btn.onclick = () => {
                     currentPage = i;
                     displayBooks(currentPage);
@@ -431,17 +648,17 @@
 
         function handleSearch() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
-            
+
             if (query === "") {
                 filteredBooks = [...allBooks];
             } else {
-                filteredBooks = allBooks.filter(book => 
-                    book.title.toLowerCase().includes(query) || 
-                    book.author.toLowerCase().includes(query) || 
+                filteredBooks = allBooks.filter(book =>
+                    book.title.toLowerCase().includes(query) ||
+                    book.author.toLowerCase().includes(query) ||
                     book.publisher.toLowerCase().includes(query)
                 );
             }
-            
+
             currentPage = 1;
             displayBooks(currentPage);
             setupPagination(filteredBooks.length);
@@ -451,8 +668,8 @@
             try {
                 const response = await fetch('423data.csv');
                 let csvText = await response.text();
-                csvText = csvText.replace(/^\uFEFF/, '');
-                
+                csvText = csvText.replace(/^﻿/, '');
+
                 const data = parseCSV(csvText);
                 const header = data[0].map(h => h.trim());
                 const rows = data.slice(1);
@@ -484,7 +701,7 @@
 
                 shuffleArray(allBooks);
 
-                document.getElementById('count-summary').innerHTML = `현재 <strong>${allBooks.length}명</strong>의 추천이 모였습니다.`;
+                document.getElementById('count-summary').innerHTML = `TOTAL <strong>${allBooks.length}</strong> PICKS · 출판인의 추천이 도착했습니다`;
 
                 filteredBooks = [...allBooks];
                 displayBooks(currentPage);
@@ -493,7 +710,7 @@
                 document.getElementById('search-input').addEventListener('input', handleSearch);
 
             } catch (error) {
-                document.getElementById('loader').innerHTML = `⚠️ 데이터를 로드하지 못했습니다.`;
+                document.getElementById('loader').innerHTML = `[ ERROR · 데이터를 불러오지 못했습니다 ]`;
             }
         }
 
