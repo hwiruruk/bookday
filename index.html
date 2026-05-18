@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>세계 책의 날 4.23, 출판인 PICK 인생책</title>
+    <title>청년문화예술패스 × 한국출판인회의 PICK</title>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -179,6 +179,36 @@
             font-weight: 700;
         }
 
+        .filter-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--paper);
+            color: var(--ink-blue);
+            border: 2px solid var(--ink-blue);
+            padding: 0.55rem 1.2rem;
+            font-family: 'IBM Plex Sans KR', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            letter-spacing: 0.02em;
+        }
+
+        .filter-btn:hover {
+            background: var(--pale-blue);
+        }
+
+        .filter-btn.active {
+            background: var(--ink-blue);
+            color: var(--paper);
+        }
+
         .search-wrapper {
             max-width: 720px;
             margin: 0 auto 3.5rem auto;
@@ -271,6 +301,32 @@
             letter-spacing: 0.1em;
             padding: 0.3rem 0.7rem;
             z-index: 2;
+        }
+
+        .type-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-family: 'IBM Plex Sans KR', sans-serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            padding: 0.3rem 0.8rem;
+            z-index: 2;
+            font-weight: 700;
+        }
+
+        .type-badge.our {
+            background: #FFE45C;
+            color: var(--ink-blue);
+            border-left: 2px solid var(--ink-blue);
+            border-bottom: 2px solid var(--ink-blue);
+        }
+
+        .type-badge.good {
+            background: var(--electric-blue);
+            color: #fff;
+            border-left: 2px solid var(--ink-blue);
+            border-bottom: 2px solid var(--ink-blue);
         }
 
         .cover-area {
@@ -468,34 +524,41 @@
     <header>
         <div class="header-inner">
             <div class="top-bar">
-                <span><span class="badge">VOL. 04</span> &nbsp;&nbsp; WORLD BOOK DAY × KPC</span>
-                <span class="mono">2026 / EDITION 03</span>
+                <span><span class="badge">KPC × YES24</span> &nbsp;&nbsp; 한국출판인회의 × 예스24</span>
+                <span class="mono">YOUTH CULTURE PASS</span>
             </div>
 
             <h1>
-                읽는 사람만<br>
-                아는 <span class="accent">기쁨</span>이<br>
-                <span class="stamp">있다.</span>
+                교양 있는<br>
+                청년의 <span class="accent">책장</span>은<br>
+                <span class="stamp">따로 있다.</span>
             </h1>
 
             <div class="header-meta">
                 <p class="tagline">
-                    세계 책의 날 <strong>4.23</strong>, 한국출판인회의가 함께하는 출판인의 인생책 큐레이션 —
-                    오늘의 청년 독자에게 건네는 한 권.
+                    <strong>청년문화예술패스</strong>로 채우는 첫 책장 —
+                    한국출판인회의 회원사가 직접 고른 <strong>‘우리 책’</strong>과 <strong>‘좋은 책’</strong>,
+                    출판인의 시선으로 큐레이션한 단 두 권.
                 </p>
                 <div class="issue-no">
-                    NO.<strong>04 / 23</strong>
-                    READING ISSUE
+                    YOUTH<strong>PASS</strong>
+                    BOOK CURATION
                 </div>
             </div>
         </div>
     </header>
 
     <div class="container">
-        <div class="section-label">CURATED PICKS / 출판인의 인생책</div>
+        <div class="section-label">CURATED PICKS / 출판인의 큐레이션 — 우리 책 &amp; 좋은 책</div>
 
         <div class="summary-wrapper">
             <div class="count-summary" id="count-summary">LOADING ···</div>
+        </div>
+
+        <div class="filter-wrapper">
+            <button class="filter-btn active" data-filter="ALL">전체</button>
+            <button class="filter-btn" data-filter="우리책">우리 책 · 자사 도서</button>
+            <button class="filter-btn" data-filter="좋은책">좋은 책 · 타사 도서</button>
         </div>
 
         <div class="search-wrapper">
@@ -510,7 +573,7 @@
     </div>
 
     <footer>
-        © 2026 한국출판인회의 · WORLD BOOK DAY 4.23
+        © 2026 한국출판인회의 × YES24 · 청년문화예술패스 BOOK CURATION
     </footer>
 
     <script>
@@ -569,6 +632,7 @@
         let allBooks = [];
         let filteredBooks = [];
         let currentPage = 1;
+        let currentFilter = 'ALL';
         const itemsPerPage = 12;
 
         function pad(n) { return String(n).padStart(3, '0'); }
@@ -595,10 +659,14 @@
                 cardLink.target = '_blank';
 
                 const number = pad(startIndex + i + 1);
+                const isOur = book.type === '우리책';
+                const badgeClass = isOur ? 'our' : 'good';
+                const badgeText = isOur ? '우리 책 · 자사' : '좋은 책 · 타사';
 
                 cardLink.innerHTML = `
                     <div class="book-card">
                         <div class="card-number">NO. ${number}</div>
+                        <div class="type-badge ${badgeClass}">${badgeText}</div>
                         <div class="cover-area">
                             <img src="${book.cover}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/150x220?text=No+Cover'">
                         </div>
@@ -646,23 +714,30 @@
             }
         }
 
-        function handleSearch() {
+        function applyFilters() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
 
-            if (query === "") {
-                filteredBooks = [...allBooks];
-            } else {
-                filteredBooks = allBooks.filter(book =>
+            let result = [...allBooks];
+
+            if (currentFilter !== 'ALL') {
+                result = result.filter(b => b.type === currentFilter);
+            }
+
+            if (query !== "") {
+                result = result.filter(book =>
                     book.title.toLowerCase().includes(query) ||
                     book.author.toLowerCase().includes(query) ||
                     book.publisher.toLowerCase().includes(query)
                 );
             }
 
+            filteredBooks = result;
             currentPage = 1;
             displayBooks(currentPage);
             setupPagination(filteredBooks.length);
         }
+
+        function handleSearch() { applyFilters(); }
 
         async function loadBooks() {
             try {
@@ -679,6 +754,7 @@
                     company: getIdx('소속'),
                     role: getIdx('직책'),
                     name: getIdx('표기명'),
+                    type: getIdx('구분'),
                     title: getIdx('추천도서명'),
                     author: getIdx('저자'),
                     publisher: getIdx('출판사'),
@@ -691,6 +767,7 @@
                     company: row[idx.company] || '',
                     role: row[idx.role] || '',
                     name: row[idx.name] || '',
+                    type: row[idx.type] || '좋은책',
                     title: row[idx.title] || '',
                     author: row[idx.author] || '',
                     publisher: row[idx.publisher] || '',
@@ -701,13 +778,25 @@
 
                 shuffleArray(allBooks);
 
-                document.getElementById('count-summary').innerHTML = `TOTAL <strong>${allBooks.length}</strong> PICKS · 출판인의 추천이 도착했습니다`;
+                const ourCount = allBooks.filter(b => b.type === '우리책').length;
+                const goodCount = allBooks.filter(b => b.type === '좋은책').length;
+                document.getElementById('count-summary').innerHTML =
+                    `TOTAL <strong>${allBooks.length}</strong> PICKS · 우리 책 ${ourCount} / 좋은 책 ${goodCount}`;
 
                 filteredBooks = [...allBooks];
                 displayBooks(currentPage);
                 setupPagination(filteredBooks.length);
 
                 document.getElementById('search-input').addEventListener('input', handleSearch);
+
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        currentFilter = btn.dataset.filter;
+                        applyFilters();
+                    });
+                });
 
             } catch (error) {
                 document.getElementById('loader').innerHTML = `[ ERROR · 데이터를 불러오지 못했습니다 ]`;
